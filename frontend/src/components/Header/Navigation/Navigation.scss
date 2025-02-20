@@ -1,0 +1,31 @@
+@import '/src/styles/style.scss';
+
+.nav__list {
+	display: flex;
+	gap: 25px;
+	.nav__item {
+		.nav__link {
+			position: relative;
+			font-size: 16px;
+			color: $main-text-color;
+			font-weight: 500;
+
+			&::after {
+				position: absolute;
+				content: '';
+				bottom: -8px;
+				display: block;
+				width: 0;
+				height: 1.2px;
+				background: $orange-color;
+				transition: 0.3s;
+				left: 50%;
+				transform: translate(-50%);
+			}
+
+			&:hover::after {
+				  width: 100%;
+			}
+		}
+	}
+}
