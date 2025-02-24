@@ -1,4 +1,4 @@
-@import '/src/styles/style.scss';
+@use '/src/styles/style' as *;
 
 .header {
 	width: 100%;
@@ -7,6 +7,7 @@
 	background-color: $white-color;
 	border-bottom: 1px solid #e8e8ed;
 	z-index: 100;
+	
 	.header__container {
 		justify-content: space-between;
 		align-items: center;

@@ -1,0 +1,9 @@
+@import url("/src/styles/style.scss");
+.logo {
+  font-size: 25px;
+  font-weight: 700;
+}
+.logo img {
+  width: 28px;
+  height: 28px;
+}

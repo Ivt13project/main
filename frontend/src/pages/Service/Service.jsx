@@ -4,7 +4,7 @@ import './Service.scss'
 
 const Service = () => {
 	useEffect(() => {
-		document.title = 'Поиск и обслуживание авто | ITishka'
+		document.title = 'Поиск и обслуживание авто | 4inilka'
 	}, [])
 	return (
 		<div>

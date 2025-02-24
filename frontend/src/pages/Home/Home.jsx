@@ -3,7 +3,7 @@ import Header from '../../components/Header/Header'
 
 const Home = () => {
 	useEffect(() => {
-		document.title = 'Ремонт и обслуживание автомобилей | ITishka'
+		document.title = 'Ремонт и обслуживание автомобилей | 4inilka'
 	}, [])
 	return (
 		<>

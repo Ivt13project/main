@@ -1,12 +1,15 @@
-@import '/src/styles/style.scss';
+@use '/src/styles/style' as *;
 
 .logo {
 	color: $main-text-color;
 	font-size: 25px;
 	font-weight: 700;
+	display: flex;
+	gap: 5px;
+	align-items: center;
 
 	img {
-		width: 28px;
-		height: 28px;
+		width: 20px;
+		height: 20px;
 	}
 }

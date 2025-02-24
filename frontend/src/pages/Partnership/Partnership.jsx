@@ -4,7 +4,7 @@ import './Partnership.scss'
 
 const Partnership = () => {
 	useEffect(() => {
-		document.title = 'Подключение автосервисов | ITishka'
+		document.title = 'Подключение автосервисов | 4inilka'
 	}, [])
 	return (
 		<div>
