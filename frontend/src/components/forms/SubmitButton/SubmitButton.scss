@@ -1,0 +1,18 @@
+@use '/src/styles/style' as *;
+
+.form__button {
+	padding: 14px;
+	border: none;
+	border-radius: 0.5rem;
+	background-color: $orange-color;
+	color: $white-color;
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 15px;
+	transition: 0.2s;
+	margin-top: 30px;
+
+	&:hover {
+		background-color: #ffa442cc;
+	}
+}

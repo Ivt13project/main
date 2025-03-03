@@ -1,0 +1,31 @@
+@charset "UTF-8";
+/* Сброс стилей */
+@import './reset.css';
+/* Шрифты */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
+/* Переменные	*/
+body {
+  color: #1c1c27;
+  font-weight: 500;
+  line-height: 1.2;
+  font-size: 15px;
+  font-family: "Montserrat";
+  background-color: #eaeaea;
+  padding-top: 70px;
+}
+body #root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+body .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+body .main {
+  flex-direction: column;
+  flex-grow: 1;
+  display: flex;
+}
