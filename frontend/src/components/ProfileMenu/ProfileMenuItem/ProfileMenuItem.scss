@@ -1,0 +1,13 @@
+@use '/src/styles/style' as *;
+
+.profile-menu__item {
+	.profile-menu__link {
+		gap: 5px;
+		color: $main-text-color;
+		transition: 0.1s;
+
+		&:hover {
+			color: $orange-color;
+		}
+	}
+}

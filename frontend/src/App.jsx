@@ -4,6 +4,8 @@ import Login from './pages/Login/Login'
 import Partnership from './pages/Partnership/Partnership'
 import Register from './pages/Register/Register'
 import Service from './pages/Service/Service'
+import Applications from './pages/Applications/Applications'
+import SearchService from './pages/SearchService/SearchService'
 import './styles/style.scss'
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
 				<Route path='/partnership' element={<Partnership />} />
 				<Route path='/service' element={<Service />} />
 				<Route path='/register' element={<Register />} />
+				<Route path='/applications' element={<Applications />} />
+				<Route path='/search/service' element={<SearchService />} />
 			</Routes>
 		</Router>
 	)

@@ -7,10 +7,10 @@ const Service = () => {
 		document.title = 'Поиск и обслуживание авто | 4inilka'
 	}, [])
 	return (
-		<div>
+		<>
 			<Header />
 			<h1>Страница для клиентов</h1>
-		</div>
+		</>
 	)
 }
 

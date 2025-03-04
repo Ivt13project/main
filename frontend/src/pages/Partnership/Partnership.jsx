@@ -7,10 +7,10 @@ const Partnership = () => {
 		document.title = 'Подключение автосервисов | 4inilka'
 	}, [])
 	return (
-		<div>
+		<>
 			<Header />
 			<h1>Страница для организациям-партнеров</h1>
-		</div>
+		</>
 	)
 }
 
