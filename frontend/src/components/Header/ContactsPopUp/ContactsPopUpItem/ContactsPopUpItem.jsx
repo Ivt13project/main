@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import './PopUpItem.scss'
+import './ContactsPopUpItem.scss'
 
 const PopUpItem = ({icon, alt, href, text}) => {
 	return (

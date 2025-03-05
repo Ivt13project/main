@@ -3,17 +3,32 @@ import Buttons from './Buttons/Buttons'
 import './Header.scss'
 import Logo from './Logo/Logo'
 import Navigation from './Navigation/Navigation'
-import PopUp from './PopUp/PopUp'
+import ContactsPopUp from './ContactsPopUp/ContactsPopUp'
+import CityPopUp from './CityPopUp/CityPopUp'
 
 const Header = () => {
-	const [isPopUpVisible, setPopUpVisible] = useState(false)
+	const [isContactPopUpVisible, setContactPopUpVisible] = useState(false)
+	const [isCityPopUpVisible, setCityPopUpVisible] = useState(false)
+	const [selectedCity, setSelectedCity] = useState(() => {
+		return localStorage.getItem('selectedCity') || ''
+	})
 
-	const handleButtonClick = () => {
-		setPopUpVisible(true)
+	const handleContactButtonClick = () => {
+		setContactPopUpVisible(true)
+	}
+
+	const handleCityButtonClick = () => {
+		setCityPopUpVisible(true)
 	}
 
 	const handleClose = () => {
-		setPopUpVisible(false)
+		setContactPopUpVisible(false)
+		setCityPopUpVisible(false)
+	}
+
+	const handleCitySelect = city => {
+		setSelectedCity(city)
+		localStorage.setItem('selectedCity', city)
 	}
 
 	return (
@@ -23,8 +38,17 @@ const Header = () => {
 					<Logo />
 					<Navigation />
 				</div>
-				<Buttons onClick={handleButtonClick} />
-				<PopUp isVisible={isPopUpVisible} onClose={handleClose} />
+				<Buttons
+					onContactClick={handleContactButtonClick}
+					onCityClick={handleCityButtonClick}
+					selectedCity={selectedCity}
+				/>
+				<ContactsPopUp isVisible={isContactPopUpVisible} onClose={handleClose} />
+				<CityPopUp
+					isVisible={isCityPopUpVisible}
+					onClose={handleClose}
+					onCitySelect={handleCitySelect}
+				/>
 			</div>
 		</header>
 	)

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import Cross from '../../Cross/Cross'
-import PopUpItem from './PopItem/PopUpItem'
-import './PopUp.scss'
+import './ContactsPopUp.scss'
+import ContactsPopUpItem from './ContactsPopUpItem/ContactsPopUpItem'
 
 const PopUp = ({ isVisible, onClose }) => {
 	if (!isVisible) return null
@@ -18,23 +18,23 @@ const PopUp = ({ isVisible, onClose }) => {
 				<div className='popup__top'>
 					<h3 className='popup__title'>Контакты</h3>
 					<div className='popup__close'>
-						<Cross onClose={onClose}/>
+						<Cross onClose={onClose} />
 					</div>
 				</div>
 				<ul className='popup__list'>
-					<PopUpItem
+					<ContactsPopUpItem
 						icon={'/src/assets/icons/phone-svgrepo-com.svg'}
 						alt={'Телефон'}
 						text={'8 (800) 666-66-66'}
 						href={'tel:880066666'}
 					/>
-					<PopUpItem
+					<ContactsPopUpItem
 						icon={'/src/assets/icons/telegram-svgrepo-com.svg'}
 						alt={'Телеграм'}
 						text={'Telegram'}
 						href={''}
 					/>
-					<PopUpItem
+					<ContactsPopUpItem
 						icon={'/src/assets/icons/email-1-svgrepo-com.svg'}
 						alt={'Почта'}
 						text={'support@4inilka.com'}

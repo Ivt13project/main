@@ -2,10 +2,11 @@
 import { useState } from 'react'
 import ProfileMenu from '../../ProfileMenu/ProfileMenu'
 import './Buttons.scss'
+import { useUser } from '/src/data/userContext'
 
-const Buttons = ({ onClick }) => {
-
+const Buttons = ({ onContactClick, onCityClick }) => {
 	const [isMenuOpen, setMenuOpen] = useState(false)
+	const { userData } = useUser()
 	const isLoggedIn = true
 
 	const handleProfileClick = () => {
@@ -19,7 +20,18 @@ const Buttons = ({ onClick }) => {
 	return (
 		<>
 			<div className='header__buttons'>
-				<button className='header__button' onClick={onClick}>
+				<div className='header__button-city' onClick={onCityClick}>
+					<button className='header__button'>
+						<img
+							src='/src/assets/icons/location-pin-alt-1-svgrepo-com.svg'
+							alt='Выбор города'
+						/>
+					</button>
+					{userData.city && (
+						<span className='selected-city'>{userData.city}</span>
+					)}
+				</div>
+				<button className='header__button' onClick={onContactClick}>
 					<img src='/src/assets/icons/phone-svgrepo-com.svg' alt='Контакты' />
 					Контакты
 				</button>

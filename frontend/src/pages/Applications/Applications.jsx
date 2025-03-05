@@ -1,17 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from '../../components/Header/Header'
 import Request from '../../components/Request/Request'
 import requestsData from '../../data/requestsData'
 import './Applications.scss'
 
 const Applications = () => {
+
+	useEffect(() => {
+		document.title = 'Заявки | 4inilka'
+	}, [])
+
 	const [activeTab, setActiveTab] = useState('Ожидает подтверждения')
 	const [data, setData] = useState(requestsData)
 
-	const handleCancelRequest = (tab, index) => {
+	const handleCancelRequest = (tab, requestId) => {
 		setData(prevData => ({
 			...prevData,
-			[tab]: prevData[tab].filter((_, i) => i !== index),
+			[tab]: prevData[tab].filter(request => request.id !== requestId), 
 		}))
 	}
 
@@ -35,11 +40,11 @@ const Applications = () => {
 				</div>
 				<div className='requests__cards'>
 					{data[activeTab].length > 0 ? (
-						data[activeTab].map((request, index) => (
+						data[activeTab].map(request => (
 							<Request
-								key={index}
+								key={request.id} 
 								data={request}
-								onCancel={() => handleCancelRequest(activeTab, index)}
+								onCancel={() => handleCancelRequest(activeTab, request.id)} // Передача id
 							/>
 						))
 					) : (

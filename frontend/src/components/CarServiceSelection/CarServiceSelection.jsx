@@ -21,7 +21,7 @@ const CarServiceSelection = () => {
 	return (
 		<div className='service-selection__car-service car-service'>
 			<div className='car-service__title' onClick={toggleList}>
-				<span>Выбрать автосервис</span>
+				<span>Выберите автосервис</span>
 				<img
 					src='/src/assets/icons/arrow-down-svgrepo-com.svg'
 					className={`arrow ${isOpen ? 'open' : ''}`}

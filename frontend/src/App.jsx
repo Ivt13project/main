@@ -6,6 +6,7 @@ import Register from './pages/Register/Register'
 import Service from './pages/Service/Service'
 import Applications from './pages/Applications/Applications'
 import SearchService from './pages/SearchService/SearchService'
+import Profile from './pages/Profile/Profile'
 import './styles/style.scss'
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
 				<Route path='/register' element={<Register />} />
 				<Route path='/applications' element={<Applications />} />
 				<Route path='/search/service' element={<SearchService />} />
+				<Route path='/profile' element={<Profile />} />
 			</Routes>
 		</Router>
 	)
