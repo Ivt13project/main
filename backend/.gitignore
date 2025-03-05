@@ -1,0 +1,39 @@
+# Байт-код Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Файлы конфигурации окружения
+.env
+
+# Виртуальные окружения
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Файлы миграций Django (если вы не хотите отслеживать их в Git)
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# Файлы, сгенерированные Django
+db.sqlite3
+
+# Файлы конфигурации редакторов и IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Файлы, сгенерированные macOS
+.DS_Store
+
+# Файлы, сгенерированные Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
