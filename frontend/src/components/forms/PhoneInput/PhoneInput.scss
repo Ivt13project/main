@@ -1,0 +1,7 @@
+@use '/src/styles/style' as *;
+
+.phone__input {
+	background: url('src/assets/icons/phone-svgrepo-com.svg') no-repeat 10px
+		center;
+	background-size: 20px 20px;
+}
