@@ -23,8 +23,8 @@ class Organization(models.Model):
         return self.organization_short_name
 
 class Address(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    address_type = models.ForeignKey(AddressType, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, related_name='addresses', on_delete=models.CASCADE)
+    address_type = models.ForeignKey(AddressType, related_name='addresses', on_delete=models.CASCADE)
     subject_name = models.CharField(max_length=50)
     city_name = models.CharField(max_length=50)
     street_name = models.CharField(max_length=50)
