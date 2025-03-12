@@ -2,6 +2,8 @@ import { useState } from 'react'
 import PasswordInput from '../PasswordInput/PasswordInput'
 import PhoneInput from '../PhoneInput/PhoneInput'
 import SubmitButton from '../SubmitButton/SubmitButton'
+import authService from '../../authService/authService'
+
 import './LoginForm.scss'
 
 const LoginForm = () => {
@@ -15,6 +17,14 @@ const LoginForm = () => {
 
 	const handleSubmit = e => {
 		e.preventDefault()
+		authService.loginCustomer(phone, password).then(
+            () => {
+                window.location.reload();
+            },
+            (error) => {
+                console.log(error);
+            }
+        );
 		const newErrors = {
 			phone: '',
 			password: '',

@@ -1,0 +1,47 @@
+@use '/src/styles/style' as *;
+
+.service-selection__container {
+	.service-selection__grid {
+		display: grid;
+		grid-template-areas: 'first-container second-container';
+		grid-template-columns: 41fr 59fr;
+		margin: 0 auto;
+		min-height: calc(100vh);
+		margin-top: 40px;
+
+		.service-selection__left {
+			padding-right: 50px;
+		}
+
+		.service-selection__right {
+			.service-selection__tabs {
+				display: flex;
+				gap: 20px;
+
+				.service-selection__tab {
+					color: $color-text-secondary;
+					font-size: 15px;
+					font-weight: 500;
+					background: none;
+					transition: 0.1s;
+				}
+
+				.service-selection__tab.active {
+					color: $orange-color;
+					position: relative;
+					&::after {
+						position: absolute;
+						content: '';
+						bottom: -8px;
+						display: block;
+						height: 1.2px;
+						background: $orange-color;
+						left: 50%;
+						transform: translate(-50%);
+						width: 100%;
+					}
+				}
+			}
+		}
+	}
+}

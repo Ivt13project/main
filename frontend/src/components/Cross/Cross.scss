@@ -1,0 +1,9 @@
+@use '/src/styles/style' as *;
+
+svg {
+	cursor: pointer;
+	transition: 0.1s;
+	&:hover {
+		fill: $orange-color;
+	}
+}
