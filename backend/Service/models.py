@@ -24,6 +24,7 @@ class ServiceRequest(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     date_service = models.DateTimeField()
     add_info = models.CharField(max_length=250, null=True, blank=True)
+    status = models.CharField(max_length=20, null=True, blank=True)
 
     def __str__(self):
         return f"Service Request {self.id}"

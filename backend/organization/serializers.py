@@ -46,3 +46,17 @@ class OrganizationSerializerPost(serializers.ModelSerializer):
              'responsible_person_email',
              'responsible_person_phone_number'
          ]
+
+
+
+class OrganizationDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organization
+        fields = [
+            'organization_full_name', 
+            'inn', 
+            'kpp', 
+            'ogrn', 
+            'responsible_person_email', 
+            'responsible_person_phone_number'
+        ]        
