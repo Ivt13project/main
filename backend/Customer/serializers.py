@@ -1,4 +1,3 @@
-# serializers.py
 from rest_framework import serializers
 from .models import Customer
 
@@ -12,8 +11,8 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         customer = Customer.objects.create(
-            customer_surname=validated_data['customer_surname'],
-            customer_name=validated_data['customer_name'],
+            customer_surname=validated_data.get('customer_surname', ''),
+            customer_name=validated_data.get('customer_name', ''),
             customer_patronymic=validated_data.get('customer_patronymic', ''),
             customer_phone_number=validated_data['customer_phone_number']
         )
