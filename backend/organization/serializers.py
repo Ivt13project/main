@@ -6,31 +6,24 @@ class AddressTypeSerializer(serializers.ModelSerializer):
         model = AddressType
         fields = ['address_type_name', 'add_info']
 
-class OrganizationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Organization
-        fields = [
-            'organization_full_name',
-            'organization_short_name',
-            'inn',
-            'kpp',
-            'ogrn',
-            'responsible_person_surname',
-            'responsible_person_name',
-            'responsible_person_patronymic',
-            'responsible_person_email',
-            'responsible_person_phone_number'
-        ]
-
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
+        address_type = AddressTypeSerializer()  
+        organization = serializers.PrimaryKeyRelatedField(queryset=Organization.objects.all())  
         model = Address
         fields = [
-            'organization',
-            'address_type',
-            'subject_name',
             'city_name',
             'street_name',
-            'house_number',
-            'add_info'
+            'house_number'
+        ]
+
+
+class OrganizationSerializer(serializers.ModelSerializer):
+    addresses = AddressSerializer(many=True, read_only=True)
+    class Meta:
+        model = Organization
+        fields = [       
+            'id',
+            'organization_short_name',                       
+            'addresses'
         ]

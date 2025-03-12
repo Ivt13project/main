@@ -18,12 +18,13 @@ class AddressTypeListCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class OrganizationListCreateView(APIView):
-    def get(self, request):
-        organizations = Organization.objects.all()
-        serializer = OrganizationSerializer(organizations, many=True)
-        return Response(serializer.data)
 
+class OrganizationListCreateView(APIView):
+    # Получение списка организаций
+    def get(self, request):
+        organizations = Organization.objects.all()  
+        serializer = OrganizationSerializer(organizations, many=True)  
+        return Response(serializer.data)  
     def post(self, request):
         serializer = OrganizationSerializer(data=request.data)
         if serializer.is_valid():
