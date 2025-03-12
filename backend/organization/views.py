@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import AddressType, Organization, Address
-from .serializers import AddressTypeSerializer, OrganizationSerializer, AddressSerializer
+from .serializers import AddressTypeSerializer, OrganizationSerializer, AddressSerializer, OrganizationSerializerPost
 
 class AddressTypeListCreateView(APIView):
     def get(self, request):
@@ -20,13 +20,14 @@ class AddressTypeListCreateView(APIView):
 
 
 class OrganizationListCreateView(APIView):
-    # Получение списка организаций
+
     def get(self, request):
         organizations = Organization.objects.all()  
         serializer = OrganizationSerializer(organizations, many=True)  
         return Response(serializer.data)  
+    
     def post(self, request):
-        serializer = OrganizationSerializer(data=request.data)
+        serializer = OrganizationSerializerPost(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
