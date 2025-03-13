@@ -10,7 +10,7 @@ class Customer(models.Model):
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
 
-    def cheak_password(self, password):
+    def check_password(self, password):
         return check_password(password, self.password)
     
     def __str__(self):
