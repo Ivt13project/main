@@ -1,1 +1,44 @@
 @use '/src/styles/style' as *;
+
+.partnership {
+	&__hero {
+		text-align: center;
+		margin-top: 40px;
+	}
+	&__title {
+		font-size: 2.5rem;
+		line-height: 3rem;
+		font-weight: 700;
+	}
+	&__sub-title {
+		font-size: 1.25rem;
+		line-height: 1.5rem;
+		color: $color-text-secondary;
+		margin-top: 20px;
+	}
+	&__btn {
+		display: inline-block;
+		padding: 0.875rem 2rem;
+		border: none;
+		border-radius: 0.5rem;
+		background-color: $orange-color;
+		color: $white-color;
+		font-weight: 600;
+		font-size: 15px;
+		transition: 0.2s;
+		padding: 0.875rem 2rem;
+		margin-top: 20px;
+
+		&:hover {
+			background-color: #ffa442cc;
+		}
+	}
+	&__img {
+		text-align: center;
+		margin-top: 20px;
+		img {
+			width: 25%;
+			height: auto;
+		}
+	}
+}

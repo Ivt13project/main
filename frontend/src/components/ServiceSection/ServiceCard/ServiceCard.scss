@@ -1,0 +1,35 @@
+@use '/src/styles/style' as *;
+
+.service-card {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: 20px;
+	background-color: $white-color;
+	border-radius: 10px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+	&__content {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between; 
+		height: 110px;
+		h2 {
+			font-size: 17px;
+			font-weight: 700;
+		}
+		p {
+			margin: 10px 0;
+			color: $color-text-secondary;
+		}
+		a {
+			color: $orange-color;
+			margin-top: auto;
+			transition: 0.1s;
+
+			&:hover {
+				color: rgba(255, 164, 66, 0.8);;
+			}
+		}
+	}
+}

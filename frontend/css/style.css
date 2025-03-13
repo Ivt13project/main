@@ -29,3 +29,9 @@ body .main {
   flex-grow: 1;
   display: flex;
 }
+body .title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 3rem;
+  margin-top: 40px;
+}
