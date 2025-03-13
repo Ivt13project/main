@@ -7,20 +7,37 @@ from .serializers import ServiceRequestSerializer, ServiceDetailSerializer, Type
 
 
 class ServiceRequestCreateView(APIView):
-    def post(self, request):
-        # Передаем данные из запроса в сериализатор
-        serializer = ServiceRequestSerializer(data=request.data)
+
+    def get(self, request):
         
-        # Проверяем, что данные валидны
+        customer_id = request.query_params.get('customer_id')
+        status_filter = request.query_params.get('status')
+
+        service_requests = ServiceRequest.objects.filter(customer_id=customer_id)
+
+        if status_filter:
+            service_requests = service_requests.filter(status=status_filter)
+
+        serializer = ServiceRequestListSerializer(service_requests, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+
+    def post(self, request):
+       
+        serializer = ServiceRequestSerializer(data=request.data)
+            
         if serializer.is_valid():
-            # Создаем объект и сохраняем его
+           
             serializer.save()
             return Response({
                 'message': 'Запрос на услугу успешно создан!',
                 'data': serializer.data
             }, status=status.HTTP_201_CREATED)
         
-        # Если данные невалидны, возвращаем ошибку
         return Response({
             'message': 'Ошибка при создании запроса!',
             'errors': serializer.errors
@@ -42,4 +59,29 @@ class TypeOfServiceListView(APIView):
     def get(self, request):
         service_types = TypeOfService.objects.all()
         serializer = TypeOfServiceSerializer(service_types, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import ServiceRequest
+from .serializers import ServiceRequestListSerializer
+from django.db.models import Q
+
+
+class ServiceRequestListView(APIView):
+    def get(self, request):
+       
+        customer_id = request.query_params.get('customer_id')
+        status_filter = request.query_params.get('status')
+       
+        service_requests = ServiceRequest.objects.filter(customer_id=customer_id)
+      
+        if status_filter:
+            service_requests = service_requests.filter(status=status_filter)
+    
+        serializer = ServiceRequestListSerializer(service_requests, many=True)
+
         return Response(serializer.data, status=status.HTTP_200_OK)

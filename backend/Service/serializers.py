@@ -6,26 +6,25 @@ from organization.models import Organization
 class ServiceRequestSerializer(serializers.ModelSerializer):
     customer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all())
     organization = serializers.PrimaryKeyRelatedField(queryset=Organization.objects.all())
-    service_details = serializers.PrimaryKeyRelatedField(queryset=ServiceDetail.objects.all(), many=True)  # Для нескольких деталей
+    service_details = serializers.PrimaryKeyRelatedField(queryset=ServiceDetail.objects.all(), many=True)  
 
     class Meta:
         model = ServiceRequest
         fields = [
             'customer', 
             'organization', 
-            'service_details',  # Список ID деталей услуги
+            'service_details',  
             'date_service',
             'add_info'
         ]
 
-    def create(self, validated_data):
-        # Извлекаем customer, organization и дату услуги
+    def post(self, validated_data):
         customer = validated_data.pop('customer')
         organization = validated_data.pop('organization')
         date_service = validated_data.pop('date_service')
         add_info = validated_data.get('add_info', None)
         
-        # Создаем объект ServiceRequest
+        
         service_request = ServiceRequest.objects.create(
             customer=customer,
             organization=organization,
@@ -33,10 +32,10 @@ class ServiceRequestSerializer(serializers.ModelSerializer):
             add_info=add_info
         )
 
-        # Извлекаем список service_details из запроса
+       
         service_details = validated_data.pop('service_details')
 
-        # Создаем соответствующие записи в ServiceRequestDetail
+       
         for service_detail in service_details:
             ServiceRequestDetail.objects.create(
                 service_request=service_request,
@@ -65,3 +64,58 @@ class TypeOfServiceSerializer(serializers.ModelSerializer):
             'id', 
             'type_name'
         ]
+
+
+
+
+class ServiceRequestListSerializer(serializers.ModelSerializer):
+    service_request_id = serializers.IntegerField(source='id')
+    service_detail_name = serializers.CharField(source='service_request_detail.service_detail.service_detail_name')
+    organization_short_name = serializers.CharField(source='organization.name')  
+    city_name = serializers.CharField(source='organization.city.name')  
+    street_name = serializers.CharField(source='organization.street.name')  
+    house_number = serializers.CharField(source='organization.house_number')  
+    service_cost = serializers.IntegerField(source='service_request_detail.service_detail.service_detail_cost')
+    time_service = serializers.CharField(source='date_service.strftime("%H:%M")')  
+
+    class Meta:
+        model = ServiceRequest
+        fields = [
+            'service_request_id',
+            'service_detail_name',
+            'organization_short_name',
+            'city_name',
+            'street_name',
+            'house_number',
+            'date_service',
+            'time_service',
+            'service_cost',
+            'status'
+        ]
+
+    def get_service_detail_name(self, obj):
+        """
+        Этот метод возвращает имена всех услуг, связанных с заявкой через ServiceRequestDetail.
+        """
+        # Получаем все связанные детали услуги для данной заявки
+        service_details = obj.servicerequestdetail_set.all()
+        detail_names = [detail.service_detail.service_detail_name for detail in service_details]
+        return detail_names
+       
+    def to_representation(self, instance):
+        """
+        Этот метод позволяет нам обработать связанные объекты,
+        такие как service_request_detail, если их несколько.
+        """
+        # Здесь предполагаем, что у ServiceRequest может быть несколько ServiceRequestDetail
+        # и что нам нужно вернуть все связанные детали.
+        data = super().to_representation(instance)
+
+        # Если у ServiceRequest несколько ServiceRequestDetail,
+        # мы собираем все связанные service_detail_name.
+        service_details = []
+        for detail in instance.servicerequestdetail_set.all():
+            service_details.append(detail.service_detail.service_detail_name)
+
+        data['service_detail_name'] = service_details
+        return data
