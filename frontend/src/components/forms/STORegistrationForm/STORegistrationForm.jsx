@@ -69,7 +69,6 @@ const STORegistrationForm = () => {
 				<div className='form__wrapper'>
 					<div className='form__input-wrapper'>
 						<PhoneInput
-							value={formData.phone}
 							onChange={handleInputChange}
 							name='phone'
 							error={errors.phone}
