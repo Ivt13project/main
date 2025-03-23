@@ -1,9 +1,8 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react'
 import STOProfileMenu from '../../STOProfileMenu/STOProfileMenu'
 import './Navigation.scss'
 
-const Navigations = () => {
+const Navigation = () => {
 	const [isMenuOpen, setMenuOpen] = useState(false)
 	const isLogged = true
 
@@ -41,4 +40,4 @@ const Navigations = () => {
 	)
 }
 
-export default Navigations
+export default Navigation
