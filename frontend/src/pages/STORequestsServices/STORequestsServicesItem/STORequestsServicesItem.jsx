@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import './Request.scss'
+import './STORequestsServicesItem.scss'
 
-function Request({ data, activeTab, onCancel }) {
+const STORequestsServicesItem = ({ data, activeTab, onCancel, onConfirm }) => {
 	return (
 		<div
 			className={`request__card ${
@@ -10,9 +10,6 @@ function Request({ data, activeTab, onCancel }) {
 		>
 			<p>
 				<strong>Услуга:</strong> {data.service}
-			</p>
-			<p>
-				<strong>Организация:</strong> {data.organization}
 			</p>
 			<p>
 				<strong>Адрес:</strong> {data.address}
@@ -29,13 +26,18 @@ function Request({ data, activeTab, onCancel }) {
 			<p>
 				<strong>Статус:</strong> {data.status}
 			</p>
-			{activeTab === 'Ожидает подтверждения' && data.status !== 'Оказана' && (
-				<button className='request__cancel-button' onClick={onCancel}>
-					Отменить запись
-				</button>
+			{activeTab === 'Ожидает подтверждения' && (
+				<div className='request__button-group'>
+					<button className='request__confirm-button' onClick={onConfirm}>
+						Подтвердить
+					</button>
+					<button className='request__cancel-button' onClick={onCancel}>
+						Отменить
+					</button>
+				</div>
 			)}
 		</div>
 	)
 }
 
-export default Request
+export default STORequestsServicesItem

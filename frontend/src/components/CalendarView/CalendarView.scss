@@ -1,0 +1,47 @@
+@use '/src/styles/style' as *;
+
+.rbc-calendar {
+	background-color: $white-color;
+	color: $main-text-color;
+}
+
+.rbc-toolbar {
+	color: $black-color;
+	padding: 20px 0;
+	margin-bottom: 0;
+}
+
+.rbc-event {
+	background-color: $orange-color;
+	color: $white-color;
+	transition: 0.1s;
+	font-weight: 400;
+	border-radius: 0px;
+	&:hover {
+		background-color: #ffa442cc;
+	}
+}
+
+.rbc-today {
+	background-color: $background-color;
+}
+
+.rbc-btn-group {
+	display: none;
+}
+
+.rbc-header {
+	padding: 20px 0;
+}
+
+.rbc-today {
+	background-color: #fffbf3;
+}
+
+.rbc-button-link {
+	font-weight: 500;
+}
+
+.rbc-toolbar-label {
+	font-weight: 600;
+}

@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+
 import { useEffect, useState } from 'react'
 import CarServiceSelection from '../../components/CarServiceSelection/CarServiceSelection'
 import Header from '../../components/Header/Header'
@@ -11,6 +12,7 @@ const SearchService = () => {
 	const [selectedServices, setSelectedServices] = useState({})
 	const categories = ['Ремонтные работы', 'Кузовные работы', 'Другие работы']
 	const [activeCategory, setActiveCategory] = useState(categories[0])
+
 
 	const handleToggleService = (group, service) => {
 		setSelectedServices(prev => {
@@ -65,7 +67,7 @@ const SearchService = () => {
 								onRemoveService={handleRemoveService}
 								onRemoveGroup={handleRemoveGroup}
 							/>
-							<CarServiceSelection />	
+							<CarServiceSelection />
 							<SummaryService
 								total={Object.values(selectedServices).flat().length}
 							/>

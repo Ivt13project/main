@@ -35,6 +35,13 @@ const STORegistrationForm = () => {
 			}
 		}
 
+		if (name === 'kpp') {
+			const regex = /^\d{0,9}$/
+			if (!regex.test(value)) {
+				return
+			}
+		}
+
 		setFormData({
 			...formData,
 			[name]: value,
@@ -69,9 +76,11 @@ const STORegistrationForm = () => {
 				<div className='form__wrapper'>
 					<div className='form__input-wrapper'>
 						<PhoneInput
+							value={formData.phone}
 							onChange={handleInputChange}
 							name='phone'
 							error={errors.phone}
+							className={`form__input ${errors.phone ? 'input-error' : ''}`}
 						/>
 					</div>
 
@@ -81,6 +90,18 @@ const STORegistrationForm = () => {
 							placeholder='ИНН'
 							name='inn'
 							value={formData.inn}
+							onChange={handleInputChange}
+							className={`form__input ${errors.inn ? 'input-error' : ''}`}
+						/>
+						{errors.inn && <span className='error-message'>{errors.inn}</span>}
+					</div>
+
+					<div className='form__input-wrapper'>
+						<input
+							type='text'
+							placeholder='КПП'
+							name='kpp'
+							value={formData.kpp}
 							onChange={handleInputChange}
 							className={`form__input ${errors.inn ? 'input-error' : ''}`}
 						/>
@@ -185,10 +206,21 @@ const STORegistrationForm = () => {
 				<SubmitButton text={'Далее'} />
 
 				<p className='form__text'>
+					У вас уже есть партнерский аккаунт?{' '}
+					<a href='/login/STO' id='switchToRegister'>
+						Войти
+					</a>
+				</p>
+
+				<p className='form__policy'>
 					Регистрируясь, вы принимаете{' '}
-					<a href='/user-agreement'>Пользовательское соглашение</a> и даете
-					согласие на{' '}
-					<a href='/personal-data-processing'>Обработку персональных данных</a>
+					<a className='form__link' href='/user-agreement'>
+						Пользовательское соглашение
+					</a>{' '}
+					и даете согласие на{' '}
+					<a className='form__link' href='/personal-data-processing'>
+						Обработку персональных данных
+					</a>
 				</p>
 			</form>
 		</div>

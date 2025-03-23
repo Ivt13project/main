@@ -1,10 +1,10 @@
-const requestsData = {
+const STOrequestsData = {
 	'Ожидает подтверждения': [
 		{
 			id: 1,
 			service: 'Ремонт кузова',
 			address: 'пр-т Победы, д.7, Москва',
-			date: '2025-04-10',
+			date: '2025-03-10',
 			time: '12:30',
 			price: 1000,
 			status: 'Ожидает',
@@ -13,7 +13,7 @@ const requestsData = {
 			id: 2,
 			service: 'Ходовая часть диагностика - проверить',
 			address: 'пр-т Победы, д.7, Москва',
-			date: '2025-04-16',
+			date: '2025-03-16',
 			time: '14:30',
 			price: 4500,
 			status: 'Ожидает',
@@ -22,13 +22,23 @@ const requestsData = {
 			id: 3,
 			service: 'Стартер - ремонт/проверка',
 			address: 'пр-т Победы, д.7, Москва',
-			date: '2025-04-17',
+			date: '2025-03-17',
 			time: '15:30',
 			price: 6000,
 			status: 'Ожидает',
 		},
 	],
-	'В работе': [],
+	'В работе': [
+		{
+			id: 5,
+			service: 'Стартер - ремонт/проверка',
+			address: 'пр-т Победы, д.7, Москва',
+			date: '2025-03-17',
+			time: '14:34',
+			price: 5500,
+			status: 'Работает',
+		},
+	],
 	Выполненные: [
 		{
 			id: 4,
@@ -43,4 +53,4 @@ const requestsData = {
 	Отмененные: [],
 }
 
-export default requestsData
+export default STOrequestsData
