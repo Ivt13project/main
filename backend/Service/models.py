@@ -20,10 +20,19 @@ class ServiceDetail(models.Model):
         return self.service_detail_name
 
 class ServiceRequest(models.Model):
+
+    STATUS_CHOICES = [
+        ('PENDING', 'Ожидает'),
+        ('IN_PROGRESS', 'В процессе'),
+        ('COMPLETED', 'Завершено'),
+        ('CANCELLED', 'Отменено'),
+    ]
+
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     date_service = models.DateTimeField()
     add_info = models.CharField(max_length=250, null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, null=True, blank=True)
 
     def __str__(self):
         return f"Service Request {self.id}"
