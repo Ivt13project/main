@@ -6,43 +6,36 @@ from organization.models import Organization
 class ServiceRequestSerializer(serializers.ModelSerializer):
     customer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all())
     organization = serializers.PrimaryKeyRelatedField(queryset=Organization.objects.all())
-    service_details = serializers.PrimaryKeyRelatedField(queryset=ServiceDetail.objects.all(), many=True)  
+    service_details = serializers.SerializerMethodField()
 
     class Meta:
         model = ServiceRequest
         fields = [
-            'customer', 
-            'organization', 
-            'service_details',  
+            'customer',
+            'organization',
+            'service_details',
             'date_service',
             'add_info'
         ]
+    print(service_details)
 
-    def post(self, validated_data):
-        customer = validated_data.pop('customer')
-        organization = validated_data.pop('organization')
-        date_service = validated_data.pop('date_service')
-        add_info = validated_data.get('add_info', None)
-        
-        
-        service_request = ServiceRequest.objects.create(
-            customer=customer,
-            organization=organization,
-            date_service=date_service,
-            add_info=add_info
-        )
+    def get_service_details(self, obj):
+        details = ServiceRequestDetail.objects.filter(service_request=obj)
+        return [detail.service_detail_id for detail in details]
 
-       
+    def create(self, validated_data):
         service_details = validated_data.pop('service_details')
+        service_request = ServiceRequest.objects.create(**validated_data)
 
-       
-        for service_detail in service_details:
+        for service_detail_id in service_details:
             ServiceRequestDetail.objects.create(
                 service_request=service_request,
-                service_detail=service_detail
+                service_detail_id=service_detail_id
             )
+        
 
         return service_request
+
     
 
 

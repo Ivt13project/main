@@ -27,7 +27,6 @@ class ServiceRequestCreateView(APIView):
 
 
     def post(self, request):
-       
         serializer = ServiceRequestSerializer(data=request.data)
             
         if serializer.is_valid():
