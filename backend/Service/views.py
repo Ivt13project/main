@@ -79,30 +79,8 @@ class ServiceRequestIDView(APIView):
         except ServiceRequest.DoesNotExist:
             return Response({"status": "error", "message": "Заявка не найдена."}, status=status.HTTP_404_NOT_FOUND)
 
-<<<<<<< HEAD
-
-
-    def post(self, request):
-        serializer = ServiceRequestSerializer(data=request.data)
-            
-        if serializer.is_valid():
-           
-            serializer.save()
-            return Response({
-                'message': 'Запрос на услугу успешно создан!',
-                'data': serializer.data
-            }, status=status.HTTP_201_CREATED)
-        
-        return Response({
-            'message': 'Ошибка при создании запроса!',
-            'errors': serializer.errors
-        }, status=status.HTTP_400_BAD_REQUEST)
-    
-
-=======
         serializer = ServiceRequestSerializer(service_request)
         return Response(serializer.data, status=status.HTTP_200_OK)
->>>>>>> e648ede6112044509d03f3599f8fa1579e3c64de
 
 
 
