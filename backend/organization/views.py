@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import AddressType, Organization, Address
-from .serializers import AddressTypeSerializer, OrganizationSerializer, AddressSerializer, OrganizationSerializerPost, OrganizationDetailSerializer
+from .serializers import AddressTypeSerializer, OrganizationSerializer, AddressSerializer, OrganizationSerializerPost, OrganizationDetailSerializer, CitySerializer
 
 class AddressTypeListCreateView(APIView):
     def get(self, request):
@@ -57,3 +57,10 @@ class OrganizationDetailView(APIView):
 
         serializer = OrganizationDetailSerializer(organization)  
         return Response(serializer.data)  
+
+
+class CityListView(APIView):
+    def get(self, request):
+        cities = Address.objects.values('id', 'city_name').distinct()
+        serializer = CitySerializer(cities, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
