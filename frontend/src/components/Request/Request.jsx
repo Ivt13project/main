@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import './Request.scss'
 
-function Request({ data, onCancel }) {
+function Request({ data, activeTab, onCancel }) {
 	return (
 		<div
 			className={`request__card ${
@@ -29,7 +29,7 @@ function Request({ data, onCancel }) {
 			<p>
 				<strong>Статус:</strong> {data.status}
 			</p>
-			{data.status !== 'Оказана' && (
+			{activeTab === 'Ожидает подтверждения' && data.status !== 'Оказана' && (
 				<button className='request__cancel-button' onClick={onCancel}>
 					Отменить запись
 				</button>

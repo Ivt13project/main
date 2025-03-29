@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import Request from '../../components/Request/Request'
 import requestsData from '../../data/requestsData'
 import './Applications.scss'
 
 const Applications = () => {
-
 	useEffect(() => {
 		document.title = 'Заявки | 4inilka'
 	}, [])
@@ -13,11 +12,24 @@ const Applications = () => {
 	const [activeTab, setActiveTab] = useState('Ожидает подтверждения')
 	const [data, setData] = useState(requestsData)
 
-	const handleCancelRequest = (tab, requestId) => {
-		setData(prevData => ({
-			...prevData,
-			[tab]: prevData[tab].filter(request => request.id !== requestId), 
-		}))
+	const handleMoveToCancelled = requestId => {
+		const activeRequests = data[activeTab]
+		const requestToCancel = activeRequests.find(
+			request => request.id === requestId
+		)
+
+		if (requestToCancel) {
+			setData(prevData => ({
+				...prevData,
+				[activeTab]: prevData[activeTab].filter(
+					request => request.id !== requestId
+				),
+				Отмененные: [
+					...prevData['Отмененные'],
+					{ ...requestToCancel, status: 'Отменена' },
+				],
+			}))
+		}
 	}
 
 	return (
@@ -42,9 +54,10 @@ const Applications = () => {
 					{data[activeTab].length > 0 ? (
 						data[activeTab].map(request => (
 							<Request
-								key={request.id} 
+								key={request.id}
 								data={request}
-								onCancel={() => handleCancelRequest(activeTab, request.id)} // Передача id
+								activeTab={activeTab} // Передаем активную вкладку как пропс
+								onCancel={() => handleMoveToCancelled(request.id)}
 							/>
 						))
 					) : (

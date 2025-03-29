@@ -7,8 +7,8 @@ import { useUser } from '/src/data/userContext'
 const Buttons = ({ onContactClick, onCityClick }) => {
 	const [isMenuOpen, setMenuOpen] = useState(false)
 	const { userData } = useUser()
-	const isLoggedIn = JSON.parse(localStorage.getItem('customer'));
-	
+	const isLoggedIn = true
+
 	const handleProfileClick = () => {
 		setMenuOpen(true)
 	}

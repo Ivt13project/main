@@ -1,0 +1,38 @@
+@use '/src/styles/style' as *;
+
+.sto-service-popup__content {
+	width: 500px !important;
+	.form__input {
+		margin-top: 15px;
+		width: 100%;
+		padding: 14px;
+		border: 1px solid #dddfe2;
+		border-radius: 0.5rem;
+		font-weight: 500;
+		transition: 0.2s;
+		font-size: 15px;
+
+		&::placeholder {
+			letter-spacing: 0;
+		}
+
+		&:hover {
+			border: 1px solid $black-color;
+		}
+
+		&:focus {
+			border: 1px solid $orange-color;
+		}
+	}
+
+	.sto-service-form__button {
+		width: 100% !important;
+	}
+
+	.error-message {
+		margin-top: 2px;
+		text-align: left;
+		color: red;
+		font-size: 12px;
+	}
+}

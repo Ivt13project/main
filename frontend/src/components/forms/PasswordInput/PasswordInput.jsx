@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import './PasswordInput.scss'
 
-const PasswordInput = ({ placeholder, value, onChange, error }) => {
+const PasswordInput = ({ placeholder, value, onChange, error, name }) => {
 	return (
 		<div>
 			<input
@@ -10,6 +10,7 @@ const PasswordInput = ({ placeholder, value, onChange, error }) => {
 				placeholder={placeholder}
 				value={value}
 				onChange={onChange}
+				name={name}
 			/>
 			{error && <p className='error-message'>{error}</p>}
 		</div>

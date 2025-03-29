@@ -23,7 +23,7 @@ const ContactForm = ({
 
 	const handleNameChange = e => {
 		const value = e.target.value
-		const regex = /^[а-яА-ЯёЁ]+$/ // ТОЛЬКО русские буквы
+		const regex = /^[а-яА-ЯёЁ]+$/ 
 		if (regex.test(value) || value === '') {
 			setLocalData(prevData => ({
 				...prevData,

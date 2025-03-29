@@ -1,0 +1,29 @@
+@use '/src/styles/style' as *;
+
+.sto-registration__form {
+	width: 50%;
+	margin-top: 40px;
+	.form__wrapper {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		column-gap: 15px;
+		row-gap: 10px;
+	}
+
+	.form__input {
+		padding-left: 14px;
+	}
+
+	.error-message {
+		grid-column: span 2; /* Занимает всю ширину */
+		color: red;
+		font-size: 12px;
+		margin-top: 2px;
+	}
+
+	.form__input-wrapper {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+	}
+}

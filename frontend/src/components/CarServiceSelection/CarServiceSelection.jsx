@@ -1,22 +1,36 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './CarServiceSelection.scss'
-import services from '../../data/car-servicesData'
+import { fetchOrganizations } from '/src/api/api.js'
 
 const CarServiceSelection = () => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [selectedService, setSelectedService] = useState(null)
+	const [organizations, setOrganizations] = useState([])
 
 	const toggleList = () => {
 		setIsOpen(!isOpen)
 	}
 
 	const handleSelectService = service => {
-		if (selectedService === service.name) {
+		if (selectedService === service.organization_short_name) {
 			setSelectedService(null)
 		} else {
-			setSelectedService(service.name)
+			setSelectedService(service.organization_short_name)
 		}
 	}
+
+	useEffect(() => {
+		const loadOrganizations = async () => {
+			try {
+				const data = await fetchOrganizations()
+				setOrganizations(data)
+			} catch (error) {
+				console.error('Failed to load organizations:', error)
+			}
+		}
+
+		loadOrganizations()
+	}, [])
 
 	return (
 		<div className='service-selection__car-service car-service'>
@@ -29,16 +43,27 @@ const CarServiceSelection = () => {
 			</div>
 			{isOpen && (
 				<ul className='car-service__list'>
-					{services.map((service, index) => (
+					{organizations.map((service, index) => (
 						<li
 							key={index}
 							className={`car-service__item ${
-								selectedService === service.name ? 'selected' : ''
+								selectedService === service.organization_short_name
+									? 'selected'
+									: ''
 							}`}
 							onClick={() => handleSelectService(service)}
 						>
-							<strong>{service.name}</strong>
-							<p>{service.address}</p>
+							<strong>{service.organization_short_name}</strong>
+							<p>
+								{service.addresses.length > 0
+									? service.addresses
+											.map(
+												address =>
+													`${address.city_name}, ${address.street_name}, ${address.house_number}`
+											)
+											.join(', ')
+									: 'Нет адресов'}
+							</p>
 						</li>
 					))}
 				</ul>
