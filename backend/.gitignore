@@ -3,6 +3,8 @@
 *.pyo
 *.pyd
 __pycache__/
+*.py[cod]
+*$py.class
 
 # Файлы конфигурации окружения
 .env
