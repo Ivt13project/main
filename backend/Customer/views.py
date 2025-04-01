@@ -2,15 +2,35 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Customer
-from .serializers import CustomerSerializer
+from .serializers import CustomerSerializer, CustomerRegisterSerializer
 from .jwt_auth import CustomerRefreshToken
 
 
-class CustomerRegisterView(generics.CreateAPIView):
+class CustomerDetailAPIView(generics.RetrieveUpdateAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+    
+    def get(self, request, *args, **kwargs):
+        customer = self.get_object()
+        serializer = self.get_serializer(customer)
+        return Response(serializer.data)
+
+    def patch(self, request, *args, **kwargs):
+        customer = self.get_object()
+        serializer = self.get_serializer(customer, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CustomerRegisterView(generics.CreateAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerRegisterSerializer
 
 class CustomerLoginView(generics.GenericAPIView):
+    serializer_class = CustomerRegisterSerializer
     def post(self, request):
         phone_number = request.data.get('customer_phone_number')
         password = request.data.get('password')
