@@ -54,11 +54,16 @@ class OrganizationDetailSerializer(serializers.ModelSerializer):
         model = Organization
         fields = [
             'organization_full_name', 
+            'organiztion_short_name',
             'inn', 
             'kpp', 
             'ogrn', 
             'responsible_person_email', 
-            'responsible_person_phone_number'
+            'responsible_person_phone_number',
+            'responsible_person_surname',
+            'responsible_person_name',
+            'responsible_person_patronymic',
+            #'addresses'
         ]        
 
 class CitySerializer(serializers.Serializer):
