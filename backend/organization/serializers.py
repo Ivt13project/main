@@ -65,7 +65,26 @@ class OrganizationDetailSerializer(serializers.ModelSerializer):
             'responsible_person_patronymic',
             #'addresses'
         ]        
--
+
 class CitySerializer(serializers.Serializer):
     city_id = serializers.IntegerField(source='id')
     city_name = serializers.CharField(max_length=50)
+
+class OrganizationRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organization
+        fields = ('id', 'responsible_person_surname', 'responsible_person_name', 'responsible_person_patronymic', 'responsible_person_phone_number', 'responsible_person_email','password')
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
+
+    def create(self, validated_data):
+        organization = Organization.objects.create(
+            responsible_person_surname=validated_data.get('responsible_person_surname', ''),
+            responsible_person_name=validated_data.get('responsible_person_name', ''),
+            responsible_person_patronymic=validated_data.get('responsible_person_patronymic', ''),
+            responsible_person_phone_number=validated_data['responsible_person_phone_number']
+        )
+        organization.set_password(validated_data['password'])
+        organization.save()
+        return organization
