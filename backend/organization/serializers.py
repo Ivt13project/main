@@ -65,7 +65,7 @@ class OrganizationDetailSerializer(serializers.ModelSerializer):
             'responsible_person_patronymic',
             #'addresses'
         ]        
-
+-
 class CitySerializer(serializers.Serializer):
     city_id = serializers.IntegerField(source='id')
     city_name = serializers.CharField(max_length=50)

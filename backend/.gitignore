@@ -20,9 +20,6 @@ venv.bak/
 */migrations/*.py
 !*/migrations/__init__.py
 
-# Файлы, сгенерированные Django
-db.sqlite3
-
 # Файлы конфигурации редакторов и IDE
 .vscode/
 .idea/
