@@ -20,6 +20,7 @@ class ServiceDetailSerializer(serializers.ModelSerializer):
         model = ServiceDetail
         fields = [
             'id', 
+            'type_of_service',
             'service_detail_name', 
             'service_detail_cost', 
             'service_detail_duration'
