@@ -104,7 +104,7 @@ class UpdateServiceRequestStatusView(APIView):
 
 
 
-class ServiceRequestCreateView(APIView):
+class ServiceCreateView(APIView):
     """
     Создание новой заявки на услугу
     Пример тела запроса:
