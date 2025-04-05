@@ -50,11 +50,12 @@ class OrganizationSerializerPost(serializers.ModelSerializer):
 
 
 class OrganizationDetailSerializer(serializers.ModelSerializer):
+    addresses = AddressSerializer(many=True, read_only=True)
     class Meta:
         model = Organization
         fields = [
             'organization_full_name', 
-            'organiztion_short_name',
+            'organization_short_name',
             'inn', 
             'kpp', 
             'ogrn', 
@@ -63,7 +64,7 @@ class OrganizationDetailSerializer(serializers.ModelSerializer):
             'responsible_person_surname',
             'responsible_person_name',
             'responsible_person_patronymic',
-            #'addresses'
+            'addresses'
         ]        
 
 class CitySerializer(serializers.Serializer):
@@ -122,3 +123,4 @@ class OrganizationRegisterSerializer(serializers.ModelSerializer):
         Address.objects.filter(id__in=addresses_ids).update(organization=organization)
         
         return organization
+    
