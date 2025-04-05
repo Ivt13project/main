@@ -71,7 +71,11 @@ class CitySerializer(serializers.Serializer):
     city_name = serializers.CharField(max_length=50)
 
 class OrganizationRegisterSerializer(serializers.ModelSerializer):
-    addresses = serializers.PrimaryKeyRelatedField(many=True, queryset=Address.objects.all())
+    addresses = serializers.PrimaryKeyRelatedField(
+        many=True, 
+        queryset=Address.objects.all(),
+        write_only=True  # Добавляем, если не нужно возвращать адреса в ответе
+    )
 
     class Meta:
         model = Organization
@@ -95,7 +99,10 @@ class OrganizationRegisterSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        addresses_data = validated_data.pop('addresses')
+        # Получаем список ID адресов
+        addresses_ids = [address.id for address in validated_data.pop('addresses')]
+        
+        # Создаем организацию
         organization = Organization.objects.create(
             responsible_person_surname=validated_data.get('responsible_person_surname', ''),
             responsible_person_name=validated_data.get('responsible_person_name', ''),
@@ -111,9 +118,7 @@ class OrganizationRegisterSerializer(serializers.ModelSerializer):
         organization.set_password(validated_data['password'])
         organization.save()
 
-        for address_id in addresses_data:
-            address = Address.objects.get(id=address_id)
-            address.organization = organization
-            address.save()
-
+        # Привязываем адреса к организации
+        Address.objects.filter(id__in=addresses_ids).update(organization=organization)
+        
         return organization
