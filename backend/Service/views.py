@@ -1,59 +1,18 @@
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from Customer.models import Customer
 from organization.models import Organization
 from .models import ServiceDetail, TypeOfService, ServiceRequest, ServiceRequestDetail
-from .serializers import ServiceRequestSerializer, ServiceDetailSerializer, TypeOfServiceSerializer, ServiceRequestDetailSerializer, GServiceRequestSerializer
+from .serializers import ServiceRequestSerializer, ServiceDetailSerializer, TypeOfServiceSerializer, ServiceRequestCreateSerializer, GServiceRequestSerializer
 
 
 
 
 class ServiceRequestCreateView(APIView):
-    def post(self, request, *args, **kwargs):
-        customer_id = request.data.get('customer_id')
-        organization_id = request.data.get('organization_id')
-        service_detail_id = request.data.get('service_detail_id')
-        date_service = request.data.get('date_service')
-
-      
-        try:
-            customer = Customer.objects.get(id=customer_id)
-            organization = Organization.objects.get(id=organization_id)
-            service_detail = ServiceDetail.objects.get(id=service_detail_id)
-        except (Customer.DoesNotExist, Organization.DoesNotExist, ServiceDetail.DoesNotExist):
-            return Response({'error': 'Invalid customer_id, organization_id, or service_detail_id'}, status=status.HTTP_400_BAD_REQUEST)
-
-       
-        service_request_data = {
-            'customer': customer.id,
-            'organization': organization.id,
-            'date_service': date_service,
-            'status': 'PENDING'
-        }
-        service_request_serializer = ServiceRequestSerializer(data=service_request_data)
-        if service_request_serializer.is_valid():
-            service_request = service_request_serializer.save()
-        else:
-            return Response(service_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-       
-        service_request_detail_data = {
-            'service_request': service_request.id,
-            'service_detail': service_detail.id
-        }
-        service_request_detail_serializer = ServiceRequestDetailSerializer(data=service_request_detail_data)
-        if service_request_detail_serializer.is_valid():
-            service_request_detail_serializer.save()
-        else:
-            service_request.delete()  
-            return Response(service_request_detail_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response({
-            'service_request': service_request_serializer.data,
-            'service_request_detail': service_request_detail_serializer.data
-        }, status=status.HTTP_201_CREATED)
+    
 
     def get(self, request, *args, **kwargs):
         customer_id = request.query_params.get('customer_id')
@@ -141,3 +100,68 @@ class UpdateServiceRequestStatusView(APIView):
         service_request.save()
 
         return Response({"status": "success", "message": "Статус заявки успешно обновлен."}, status=status.HTTP_200_OK)
+    
+
+
+
+class ServiceRequestCreateView(APIView):
+    """
+    Создание новой заявки на услугу
+    Пример тела запроса:
+    {
+        "customer": 1,
+        "organization": 1,
+        "date_service": "2023-12-31T12:00:00",
+        "add_info": "Дополнительная информация",
+        "service_detail_id": 1
+    }
+    """
+    def post(self, request, *args, **kwargs):
+        serializer = ServiceRequestCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Проверяем существование связанных объектов
+            customer = get_object_or_404(Customer, id=request.data['customer'])
+            organization = get_object_or_404(Organization, id=request.data['organization'])
+            service_detail = get_object_or_404(ServiceDetail, id=request.data['service_detail_id'])
+
+            # Создаем заявку
+            service_request = ServiceRequest.objects.create(
+                customer=customer,
+                organization=organization,
+                date_service=request.data['date_service'],
+                add_info=request.data.get('add_info', ''),
+                status='PENDING'
+            )
+
+            # Создаем детали заявки
+            ServiceRequestDetail.objects.create(
+                service_request=service_request,
+                service_detail=service_detail
+            )
+
+            # Возвращаем созданную заявку
+            response_data = {
+                'id': service_request.id,
+                'customer': service_request.customer.id,
+                'organization': service_request.organization.id,
+                'date_service': service_request.date_service,
+                'add_info': service_request.add_info,
+                'status': service_request.status,
+                'service_detail': {
+                    'id': service_detail.id,
+                    'name': service_detail.service_detail_name,
+                    'cost': service_detail.service_detail_cost
+                },
+                'message': 'Заявка успешно создана'
+            }
+
+            return Response(response_data, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )

@@ -71,20 +71,49 @@ class CitySerializer(serializers.Serializer):
     city_name = serializers.CharField(max_length=50)
 
 class OrganizationRegisterSerializer(serializers.ModelSerializer):
+    addresses = serializers.PrimaryKeyRelatedField(many=True, queryset=Address.objects.all())
+
     class Meta:
         model = Organization
-        fields = ('id', 'responsible_person_surname', 'responsible_person_name', 'responsible_person_patronymic', 'responsible_person_phone_number', 'responsible_person_email','password')
+        fields = (
+            'id',
+            'responsible_person_surname',
+            'responsible_person_name',
+            'responsible_person_patronymic',
+            'responsible_person_phone_number',
+            'responsible_person_email',
+            'password',
+            'inn',
+            'kpp',
+            'ogrn',
+            'organization_full_name',
+            'organization_short_name',
+            'addresses'
+        )
         extra_kwargs = {
             'password': {'write_only': True},
         }
 
     def create(self, validated_data):
+        addresses_data = validated_data.pop('addresses')
         organization = Organization.objects.create(
             responsible_person_surname=validated_data.get('responsible_person_surname', ''),
             responsible_person_name=validated_data.get('responsible_person_name', ''),
             responsible_person_patronymic=validated_data.get('responsible_person_patronymic', ''),
-            responsible_person_phone_number=validated_data['responsible_person_phone_number']
+            responsible_person_phone_number=validated_data['responsible_person_phone_number'],
+            responsible_person_email=validated_data['responsible_person_email'],
+            inn=validated_data['inn'],
+            kpp=validated_data['kpp'],
+            ogrn=validated_data['ogrn'],
+            organization_full_name=validated_data['organization_full_name'],
+            organization_short_name=validated_data['organization_short_name'],
         )
         organization.set_password(validated_data['password'])
         organization.save()
+
+        for address_id in addresses_data:
+            address = Address.objects.get(id=address_id)
+            address.organization = organization
+            address.save()
+
         return organization
