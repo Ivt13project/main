@@ -67,29 +67,6 @@ class TypeOfServiceSerializer(serializers.ModelSerializer):
 
 
 
-class GServiceRequestSerializer(serializers.ModelSerializer):
-    service_detail_name = serializers.CharField(source='servicedetail.service_detail_name', read_only=True)
-    organization_short_name = serializers.CharField(source='organization.organization_short_name', read_only=True)
-    city_name = serializers.CharField(source='organization.addresses.first.city_name', read_only=True)
-    street_name = serializers.CharField(source='organization.addresses.first.street_name', read_only=True)
-    house_number = serializers.CharField(source='organization.addresses.first.house_number', read_only=True)
-    service_cost = serializers.CharField(source='servicedetail.service_detail_cost', read_only=True)
-
-    class Meta:
-        model = ServiceRequest
-        fields = [
-            'id',
-            'service_detail_name',
-            'organization_short_name',
-            'city_name',
-            'street_name',
-            'house_number',
-            'date_service',
-            'service_cost',
-            'status'
-        ]
-
-
 class ServiceRequestCreateSerializer(serializers.ModelSerializer):
     service_detail_id = serializers.IntegerField(write_only=True)
     

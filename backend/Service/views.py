@@ -6,7 +6,7 @@ from rest_framework import status
 from Customer.models import Customer
 from organization.models import Organization
 from .models import ServiceDetail, TypeOfService, ServiceRequest, ServiceRequestDetail
-from .serializers import ServiceRequestSerializer, ServiceDetailSerializer, TypeOfServiceSerializer, ServiceRequestCreateSerializer, GServiceRequestSerializer
+from .serializers import ServiceRequestSerializer, ServiceDetailSerializer, TypeOfServiceSerializer, ServiceRequestCreateSerializer
 
 
 
@@ -27,7 +27,7 @@ class ServiceRequestCreateView(APIView):
             service_requests = service_requests.filter(status=status_filter)
 
        
-        serializer = GServiceRequestSerializer(service_requests, many=True)
+        serializer = ServiceRequestSerializer(service_requests, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
