@@ -17,6 +17,7 @@ class ServiceRequestCreateView(APIView):
     def get(self, request, *args, **kwargs):
         customer_id = request.query_params.get('customer_id')
         status_filter = request.query_params.get('status')
+        organization_id = request.query_params.get('organization_id')
 
         service_requests = ServiceRequest.objects.all()
 
@@ -26,6 +27,8 @@ class ServiceRequestCreateView(APIView):
         if status_filter:
             service_requests = service_requests.filter(status=status_filter)
 
+        if organization_id:
+            service_requests = service_requests.filter(organization=organization_id)
        
         serializer = ServiceRequestSerializer(service_requests, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
