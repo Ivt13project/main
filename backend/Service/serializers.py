@@ -10,6 +10,8 @@ class ServiceRequestSerializer(serializers.ModelSerializer):
     street_name = serializers.CharField(source='organization.addresses.first.street_name', read_only=True)
     house_number = serializers.CharField(source='organization.addresses.first.house_number', read_only=True)
     service_cost = serializers.SerializerMethodField()
+    customer_name = serializers.CharField(source='customer.customer_name', read_only=True)
+    customer_phone_number = serializers.CharField(source='customer.customer_phone_number', read_only=True)
 
     class Meta:
         model = ServiceRequest
@@ -22,6 +24,8 @@ class ServiceRequestSerializer(serializers.ModelSerializer):
             'house_number',
             'date_service',
             'service_cost',
+            'customer_name',
+            'customer_phone_number',
             'status'
         ]
 
