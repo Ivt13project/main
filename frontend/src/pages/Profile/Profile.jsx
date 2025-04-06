@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
-import { useUser } from '/src/data/userContext'
-import ContactForm from '/src/components/forms/ContactForm/ContactForm'
 import './Profile.scss'
+import { updateCustomerData } from '/src/api/api.js'
+import ContactForm from '/src/components/forms/ContactForm/ContactForm'
+import { useUser } from '/src/data/userContext'
 
 const Profile = () => {
 	const { userData, updateUserData } = useUser()
-	const [isCountryOpen, setCountryOpen] = useState(false)
 	const [isCityOpen, setCityOpen] = useState(false)
 	const [localData, setLocalData] = useState({ ...userData })
 
@@ -14,13 +14,20 @@ const Profile = () => {
 		document.title = 'Личный кабинет | 4inilka'
 	}, [])
 
-	const handleSave = () => {
-		updateUserData('name', localData.name)
-		updateUserData('birthdate', localData.birthdate)
-		updateUserData('phone', localData.phone)
-		updateUserData('email', localData.email)
-		updateUserData('country', localData.country)
-		updateUserData('city', localData.city)
+	const handleSave = async () => {
+		try {
+			const userId = localStorage.getItem('userId')
+			console.log('Данные для обновления:', localData)
+			await updateCustomerData(userId, localData)
+			updateUserData('customer_name', localData.customer_name)
+			updateUserData('customer_phone_number', localData.customer_phone_number)
+			updateUserData('customer_email', localData.customer_email)
+			updateUserData('customer_city', localData.customer_city)
+
+			window.location.reload()
+		} catch (error) {
+			console.error('Ошибка при сохранении данных:', error)
+		}
 	}
 
 	return (
@@ -38,8 +45,6 @@ const Profile = () => {
 					<ContactForm
 						localData={localData}
 						setLocalData={setLocalData}
-						isCountryOpen={isCountryOpen}
-						setCountryOpen={setCountryOpen}
 						isCityOpen={isCityOpen}
 						setCityOpen={setCityOpen}
 					/>

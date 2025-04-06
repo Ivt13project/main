@@ -1,32 +1,35 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 import PasswordInput from '../PasswordInput/PasswordInput'
-import PhoneInput from '../PhoneInput/PhoneInput'
+import STOPhoneInput from '../STOPhoneInput/STOPhoneInput'
 import SubmitButton from '../SubmitButton/SubmitButton'
 import './STOLoginForm.scss'
+import { loginOrganization } from '/src/api/api.js'
 
 const STOLoginForm = () => {
 	const [phone, setPhone] = useState('')
 	const [password, setPassword] = useState('')
 	const [rememberMe, setRememberMe] = useState(false)
-	const [errors, setErrors] = useState({
-		phone: '',
-		password: '',
-	})
+	const [globalError, setGlobalError] = useState('')
+	const navigate = useNavigate()
 
-	const handleSubmit = e => {
+	const handleSubmit = async e => {
 		e.preventDefault()
-		const newErrors = {
-			phone: '',
-			password: '',
+		setGlobalError('')
+		if (!phone || !password) {
+			setGlobalError('* Все поля должны быть заполнены')
+			return
 		}
 
-		if (!phone) newErrors.phone = '* Это обязательное поле'
-		if (!password) newErrors.password = '* Это обязательное поле'
-
-		setErrors(newErrors)
-
-		if (!newErrors.phone && !newErrors.password) {
-			console.log('Форма входа отправлена')
+		try {
+			const response = await loginOrganization({
+				responsible_person_phone_number: phone,
+				password,
+			})
+			localStorage.setItem('orgId', response.id)
+			navigate('/')
+		} catch {
+			setGlobalError('* Неверный логин или пароль')
 		}
 	}
 
@@ -34,18 +37,18 @@ const STOLoginForm = () => {
 		<div>
 			<form className='login__form form' onSubmit={handleSubmit}>
 				<h1 className='form__title'>Войти в партнерский аккаунт</h1>
-				<PhoneInput
+				<STOPhoneInput
 					value={phone}
 					onChange={e => setPhone(e.target.value)}
-					error={errors.phone}
+					error={!!globalError}
 				/>
 				<PasswordInput
 					placeholder={'Пароль'}
 					value={password}
 					onChange={e => setPassword(e.target.value)}
-					error={errors.password}
+					error={!!globalError}
 				/>
-
+				{globalError && <p className='error-message'>{globalError}</p>}
 				<div className='form__options'>
 					<label className='form__checkbox'>
 						<input
@@ -59,9 +62,7 @@ const STOLoginForm = () => {
 						Забыли пароль?
 					</a>
 				</div>
-
 				<SubmitButton text={'Войти'} />
-
 				<p className='form__text'>
 					Нет партнерского аккаунта?{' '}
 					<a href='/register/STO' id='switchToRegister'>

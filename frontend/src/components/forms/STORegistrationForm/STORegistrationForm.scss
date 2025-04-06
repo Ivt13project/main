@@ -12,10 +12,11 @@
 
 	.form__input {
 		padding-left: 14px;
+		background: none;
 	}
 
 	.error-message {
-		grid-column: span 2; /* Занимает всю ширину */
+		grid-column: span 2; 
 		color: red;
 		font-size: 12px;
 		margin-top: 2px;

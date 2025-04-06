@@ -1,59 +1,65 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 import PasswordInput from '../PasswordInput/PasswordInput'
-import PhoneInput from '../PhoneInput/PhoneInput'
+import STOPhoneInput from '../STOPhoneInput/STOPhoneInput'
 import SubmitButton from '../SubmitButton/SubmitButton'
 import './STORegistrationForm.scss'
+import { registerOrganization } from '/src/api/api'
 
 const STORegistrationForm = () => {
+	const navigate = useNavigate()
 	const [formData, setFormData] = useState({
-		phone: '',
+		organization_full_name: '',
+		organization_short_name: '',
 		inn: '',
-		contactName: '',
-		legalName: '',
-		actualName: '',
-		city: '',
-		email: '',
+		kpp: '',
+		ogrn: '',
+		responsible_person_email: '',
+		responsible_person_phone_number: '',
+		responsible_person_surname: '',
+		responsible_person_name: '',
+		responsible_person_patronymic: '',
 		password: '',
 		confirmPassword: '',
+		addresses: [],
 	})
 	const [errors, setErrors] = useState({})
+	const [globalError, setGlobalError] = useState('')
 
 	const handleInputChange = e => {
 		const { name, value } = e.target
 
-		if (name === 'contactName') {
-			const regex = /^[а-яА-ЯёЁ\s]*$/
-			if (!regex.test(value)) {
-				return
-			}
+		if (name === 'inn' && !/^\d{0,10}$/.test(value)) return
+		if (name === 'ogrn' && !/^\d{0,13}$/.test(value)) return
+		if (name === 'kpp' && !/^\d{0,9}$/.test(value)) return
+
+		if (name === 'responsible_person_email' && /[а-яА-ЯёЁ]/.test(value)) {
+			return
 		}
 
-		if (name === 'inn') {
-			const regex = /^\d{0,12}$/
-			if (!regex.test(value)) {
-				return
-			}
+		if (
+			[
+				'responsible_person_surname',
+				'responsible_person_name',
+				'responsible_person_patronymic',
+			].includes(name)
+		) {
+			if (!/^[а-яА-ЯёЁ\s]*$/.test(value) && value !== '') return
 		}
 
-		if (name === 'kpp') {
-			const regex = /^\d{0,9}$/
-			if (!regex.test(value)) {
-				return
-			}
-		}
-
-		setFormData({
-			...formData,
+		setFormData(prevState => ({
+			...prevState,
 			[name]: value,
-		})
+		}))
 	}
 
-	const handleSubmit = e => {
+	const handleSubmit = async e => {
 		e.preventDefault()
+		setGlobalError('')
 		const newErrors = {}
 
 		Object.keys(formData).forEach(key => {
-			if (!formData[key]) {
+			if (!formData[key] && key !== 'addresses') {
 				newErrors[key] = '* Это обязательное поле'
 			}
 		})
@@ -65,7 +71,14 @@ const STORegistrationForm = () => {
 		setErrors(newErrors)
 
 		if (Object.keys(newErrors).length === 0) {
-			console.log('Форма регистрации СТО отправлена')
+			try {
+				const data = await registerOrganization(formData)
+				console.log('Форма регистрации успешно отправлена:', data)
+				navigate('/login/STO')
+			} catch (error) {
+				console.error('Ошибка при регистрации:', error)
+				setGlobalError(error.message)
+			}
 		}
 	}
 
@@ -75,13 +88,39 @@ const STORegistrationForm = () => {
 				<h1 className='form__title'>Заполните данные СТО</h1>
 				<div className='form__wrapper'>
 					<div className='form__input-wrapper'>
-						<PhoneInput
-							value={formData.phone}
+						<input
+							type='text'
+							placeholder='Полное название организации'
+							name='organization_full_name'
+							value={formData.organization_full_name}
 							onChange={handleInputChange}
-							name='phone'
-							error={errors.phone}
-							className={`form__input ${errors.phone ? 'input-error' : ''}`}
+							className={`form__input ${
+								errors.organization_full_name ? 'input-error' : ''
+							}`}
 						/>
+						{errors.organization_full_name && (
+							<span className='error-message'>
+								{errors.organization_full_name}
+							</span>
+						)}
+					</div>
+
+					<div className='form__input-wrapper'>
+						<input
+							type='text'
+							placeholder='Краткое название организации'
+							name='organization_short_name'
+							value={formData.organization_short_name}
+							onChange={handleInputChange}
+							className={`form__input ${
+								errors.organization_short_name ? 'input-error' : ''
+							}`}
+						/>
+						{errors.organization_short_name && (
+							<span className='error-message'>
+								{errors.organization_short_name}
+							</span>
+						)}
 					</div>
 
 					<div className='form__input-wrapper'>
@@ -103,82 +142,111 @@ const STORegistrationForm = () => {
 							name='kpp'
 							value={formData.kpp}
 							onChange={handleInputChange}
-							className={`form__input ${errors.inn ? 'input-error' : ''}`}
+							className={`form__input ${errors.kpp ? 'input-error' : ''}`}
 						/>
-						{errors.inn && <span className='error-message'>{errors.inn}</span>}
+						{errors.kpp && <span className='error-message'>{errors.kpp}</span>}
 					</div>
 
 					<div className='form__input-wrapper'>
 						<input
 							type='text'
-							placeholder='ФИО контакта'
-							name='contactName'
-							value={formData.contactName}
+							placeholder='ОГРН'
+							name='ogrn'
+							value={formData.ogrn}
 							onChange={handleInputChange}
+							className={`form__input ${errors.ogrn ? 'input-error' : ''}`}
+						/>
+						{errors.ogrn && (
+							<span className='error-message'>{errors.ogrn}</span>
+						)}
+					</div>
+
+					<div className='form__input-wrapper'>
+						<STOPhoneInput
+							value={formData.responsible_person_phone_number}
+							onChange={handleInputChange}
+							name='responsible_person_phone_number'
+							error={errors.responsible_person_phone_number}
 							className={`form__input ${
-								errors.contactName ? 'input-error' : ''
+								errors.responsible_person_phone_number ? 'input-error' : ''
 							}`}
 						/>
-						{errors.contactName && (
-							<span className='error-message'>{errors.contactName}</span>
-						)}
-					</div>
-
-					<div className='form__input-wrapper'>
-						<input
-							type='text'
-							placeholder='Юридическое название компании'
-							name='legalName'
-							value={formData.legalName}
-							onChange={handleInputChange}
-							className={`form__input ${errors.legalName ? 'input-error' : ''}`}
-						/>
-						{errors.legalName && (
-							<span className='error-message'>{errors.legalName}</span>
-						)}
-					</div>
-
-					<div className='form__input-wrapper'>
-						<input
-							type='text'
-							placeholder='Фактическое название'
-							name='actualName'
-							value={formData.actualName}
-							onChange={handleInputChange}
-							className={`form__input ${
-								errors.actualName ? 'input-error' : ''
-							}`}
-						/>
-						{errors.actualName && (
-							<span className='error-message'>{errors.actualName}</span>
-						)}
-					</div>
-
-					<div className='form__input-wrapper'>
-						<input
-							type='text'
-							placeholder='Город'
-							name='city'
-							value={formData.city}
-							onChange={handleInputChange}
-							className={`form__input ${errors.city ? 'input-error' : ''}`}
-						/>
-						{errors.city && (
-							<span className='error-message'>{errors.city}</span>
+						{errors.responsible_person_phone_number && (
+							<span className='error-message'>
+								{errors.responsible_person_phone_number}
+							</span>
 						)}
 					</div>
 
 					<div className='form__input-wrapper'>
 						<input
 							type='email'
-							placeholder='Почта'
-							name='email'
-							value={formData.email}
+							placeholder='Email ответственного лица'
+							name='responsible_person_email'
+							value={formData.responsible_person_email}
 							onChange={handleInputChange}
-							className={`form__input ${errors.email ? 'input-error' : ''}`}
+							className={`form__input ${
+								errors.responsible_person_email ? 'input-error' : ''
+							}`}
 						/>
-						{errors.email && (
-							<span className='error-message'>{errors.email}</span>
+						{errors.responsible_person_email && (
+							<span className='error-message'>
+								{errors.responsible_person_email}
+							</span>
+						)}
+					</div>
+
+					<div className='form__input-wrapper'>
+						<input
+							type='text'
+							placeholder='Фамилия ответственного лица'
+							name='responsible_person_surname'
+							value={formData.responsible_person_surname}
+							onChange={handleInputChange}
+							className={`form__input ${
+								errors.responsible_person_surname ? 'input-error' : ''
+							}`}
+						/>
+						{errors.responsible_person_surname && (
+							<span className='error-message'>
+								{errors.responsible_person_surname}
+							</span>
+						)}
+					</div>
+
+					<div className='form__input-wrapper'>
+						<input
+							type='text'
+							placeholder='Имя ответственного лица'
+							name='responsible_person_name'
+							value={formData.responsible_person_name}
+							onChange={handleInputChange}
+							className={`form__input ${
+								errors.responsible_person_name ? 'input-error' : ''
+							}`}
+						/>
+						{errors.responsible_person_name && (
+							<span className='error-message'>
+								{errors.responsible_person_name}
+							</span>
+						)}
+					</div>
+
+					<div className='form__input-wrapper'>
+						<input
+							type='text'
+							placeholder='Отчество ответственного лица'
+							name='responsible_person_patronymic'
+							value={formData.responsible_person_patronymic}
+							onChange={handleInputChange}
+							className={`form__input ${
+								errors.responsible_person_patronymic ? 'input-error' : ''
+							}`}
+						/>
+						{errors.responsible_person_patronymic && (
+							<span className='error-message'>
+								{errors.responsible_person_patronymic}
+							</span>
 						)}
 					</div>
 
@@ -202,6 +270,10 @@ const STORegistrationForm = () => {
 						/>
 					</div>
 				</div>
+
+				{globalError && (
+					<p className='error-message global-error'>{globalError}</p>
+				)}
 
 				<SubmitButton text={'Далее'} />
 
