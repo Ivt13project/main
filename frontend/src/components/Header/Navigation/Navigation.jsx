@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router'
+import { NavLink, useNavigate } from 'react-router'
 import STOProfileMenu from '../../STOProfileMenu/STOProfileMenu'
 import './Navigation.scss'
 
 const Navigation = () => {
 	const [isMenuOpen, setMenuOpen] = useState(false)
+	const navigate = useNavigate()
 
 	const isLoggedIn = Boolean(localStorage.getItem('orgId'))
 
@@ -12,7 +13,17 @@ const Navigation = () => {
 		if (isLoggedIn) {
 			event.preventDefault()
 			setMenuOpen(true)
-		} 
+		}
+	}
+
+	const handleServiceClick = event => {
+		event.preventDefault()
+		const userId = localStorage.getItem('userId')
+		if (!userId) {
+			navigate('/register')
+		} else {
+			navigate('/search/service')
+		}
 	}
 
 	const handleCloseMenu = () => {
@@ -23,7 +34,11 @@ const Navigation = () => {
 		<nav className='header__nav nav'>
 			<ul className='nav__list'>
 				<li className='nav__item'>
-					<NavLink className='nav__link' to='/search/service'>
+					<NavLink
+						className='nav__link'
+						onClick={handleServiceClick}
+						to='/search/service'
+					>
 						Обслуживание автомобилей
 					</NavLink>
 				</li>
