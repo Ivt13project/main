@@ -1,18 +1,31 @@
-/* eslint-disable no-unused-vars */
-
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import CarServiceSelection from '../../components/CarServiceSelection/CarServiceSelection'
-import Header from '../../components/Header/Header'
 import SelectedServices from '../../components/SelectedServices/SelectedServices'
 import ServiceSelection from '../../components/ServiceSelection/ServiceSelection'
 import SummaryService from '../../components/SummaryService/SummaryService'
 import './SearchService.scss'
+import { fetchServiceDetails } from '/src/api/api'
+import Header from '../../components/Header/Header'
 
 const SearchService = () => {
 	const [selectedServices, setSelectedServices] = useState({})
+	const [serviceDetails, setServiceDetails] = useState([])
+	const [selectedOrganizationId, setSelectedOrganizationId] = useState(null)
 	const categories = ['Ремонтные работы', 'Кузовные работы', 'Другие работы']
 	const [activeCategory, setActiveCategory] = useState(categories[0])
 
+	useEffect(() => {
+		const loadServiceDetails = async () => {
+			try {
+				const detailsData = await fetchServiceDetails()
+				setServiceDetails(detailsData)
+			} catch (error) {
+				console.error('Ошибка загрузки деталей услуг:', error)
+			}
+		}
+
+		loadServiceDetails()
+	}, [])
 
 	const handleToggleService = (group, service) => {
 		setSelectedServices(prev => {
@@ -22,7 +35,7 @@ const SearchService = () => {
 				: [...groupServices, service]
 
 			if (updatedGroupServices.length === 0) {
-				const { [group]: _, ...rest } = prev
+				const {  ...rest } = prev
 				return rest
 			}
 
@@ -35,7 +48,7 @@ const SearchService = () => {
 			const updatedGroupServices = prev[group].filter(s => s !== service)
 
 			if (updatedGroupServices.length === 0) {
-				const { [group]: _, ...rest } = prev
+				const {  ...rest } = prev
 				return rest
 			}
 
@@ -51,13 +64,9 @@ const SearchService = () => {
 		})
 	}
 
-	useEffect(() => {
-		document.title = 'Поиск услуг | 4inilka'
-	}, [])
-
 	return (
 		<>
-			<Header />
+		<Header></Header>
 			<main className='service-selection'>
 				<div className='service-selection__container container'>
 					<div className='service-selection__grid'>
@@ -66,10 +75,16 @@ const SearchService = () => {
 								services={selectedServices}
 								onRemoveService={handleRemoveService}
 								onRemoveGroup={handleRemoveGroup}
+								serviceDetails={serviceDetails}
 							/>
-							<CarServiceSelection />
+							<CarServiceSelection
+								setSelectedOrganizationId={setSelectedOrganizationId}
+							/>
 							<SummaryService
 								total={Object.values(selectedServices).flat().length}
+								selectedServices={selectedServices}
+								selectedOrganizationId={selectedOrganizationId}
+								serviceDetails={serviceDetails}
 							/>
 						</div>
 						<div className='service-selection__right'>

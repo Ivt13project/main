@@ -10,7 +10,6 @@ import STOLogin from './pages/STOLogin/STOLogin'
 import STORegister from './pages/STORegister/STORegister'
 import STORequestsServices from './pages/STORequestsServices/STORequestsServices'
 import STOCalendar from './pages/STOCalendar/STOCalendar'
-import STOServices from './pages/STOServices/STOServices'
 import './styles/style.scss'
 
 function App() {
@@ -28,7 +27,6 @@ function App() {
 				<Route path='/login/STO' element={<STOLogin />} />
 				<Route path='/request/services' element={<STORequestsServices />} />
 				<Route path='/calendar/STO' element={<STOCalendar />} />
-				<Route path='/services/STO' element={<STOServices />} />
 			</Routes>
 		</Router>
 	)

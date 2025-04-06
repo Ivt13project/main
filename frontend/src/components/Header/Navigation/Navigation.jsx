@@ -1,16 +1,18 @@
 import { useState } from 'react'
+import { NavLink } from 'react-router'
 import STOProfileMenu from '../../STOProfileMenu/STOProfileMenu'
 import './Navigation.scss'
 
 const Navigation = () => {
 	const [isMenuOpen, setMenuOpen] = useState(false)
-	const isLogged = true
+
+	const isLoggedIn = Boolean(localStorage.getItem('orgId'))
 
 	const handleProfileClick = event => {
-		if (isLogged) {
+		if (isLoggedIn) {
 			event.preventDefault()
 			setMenuOpen(true)
-		}
+		} 
 	}
 
 	const handleCloseMenu = () => {
@@ -21,18 +23,18 @@ const Navigation = () => {
 		<nav className='header__nav nav'>
 			<ul className='nav__list'>
 				<li className='nav__item'>
-					<a className='nav__link' href='/search/service'>
+					<NavLink className='nav__link' to='/search/service'>
 						Обслуживание автомобилей
-					</a>
+					</NavLink>
 				</li>
 				<li className='nav__item'>
-					<a
+					<NavLink
 						onClick={handleProfileClick}
 						className='nav__link'
-						href='/partnership'
+						to='/partnership'
 					>
 						Партнерство
-					</a>
+					</NavLink>
 				</li>
 			</ul>
 			<STOProfileMenu isOpen={isMenuOpen} onClose={handleCloseMenu} />

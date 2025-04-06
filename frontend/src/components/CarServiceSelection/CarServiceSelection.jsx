@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from 'react'
 import './CarServiceSelection.scss'
 import { fetchOrganizations } from '/src/api/api.js'
 
-const CarServiceSelection = () => {
+const CarServiceSelection = ({ setSelectedOrganizationId }) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [selectedService, setSelectedService] = useState(null)
 	const [organizations, setOrganizations] = useState([])
@@ -12,11 +13,9 @@ const CarServiceSelection = () => {
 	}
 
 	const handleSelectService = service => {
-		if (selectedService === service.organization_short_name) {
-			setSelectedService(null)
-		} else {
-			setSelectedService(service.organization_short_name)
-		}
+		const serviceId = selectedService === service.id ? null : service.id
+		setSelectedService(serviceId)
+		setSelectedOrganizationId(serviceId)
 	}
 
 	useEffect(() => {
@@ -32,6 +31,13 @@ const CarServiceSelection = () => {
 		loadOrganizations()
 	}, [])
 
+	const userData = JSON.parse(localStorage.getItem('userData')) || {}
+	const selectedCity = userData.customer_city
+
+	const filteredOrganizations = organizations.filter(org =>
+		org.addresses.some(address => address.city_name === selectedCity)
+	)
+
 	return (
 		<div className='service-selection__car-service car-service'>
 			<div className='car-service__title' onClick={toggleList}>
@@ -39,17 +45,16 @@ const CarServiceSelection = () => {
 				<img
 					src='/src/assets/icons/arrow-down-svgrepo-com.svg'
 					className={`arrow ${isOpen ? 'open' : ''}`}
-				></img>
+					alt='toggle'
+				/>
 			</div>
 			{isOpen && (
 				<ul className='car-service__list'>
-					{organizations.map((service, index) => (
+					{filteredOrganizations.map((service, index) => (
 						<li
 							key={index}
 							className={`car-service__item ${
-								selectedService === service.organization_short_name
-									? 'selected'
-									: ''
+								selectedService === service.id ? 'selected' : ''
 							}`}
 							onClick={() => handleSelectService(service)}
 						>

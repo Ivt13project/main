@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react'
-import cities from '../../../data/citiesData'
 import Cross from '../../Cross/Cross'
 import { useUser } from '/src/data/userContext'
 import './CityPopUp.scss'
+import { updateCustomerData } from '/src/api/api.js'
+import cities from '../../../data/citiesData'
 
 const CityPopUp = ({ isVisible, onClose }) => {
 	const [searchTerm, setSearchTerm] = useState('')
@@ -13,17 +14,22 @@ const CityPopUp = ({ isVisible, onClose }) => {
 		city.toLowerCase().includes(searchTerm.toLowerCase())
 	)
 
-	const handleCityClick = city => {
-		updateUserData('city', city)
-		setSearchTerm('')
-		onClose()
+	const handleCityClick = async city => {
+		try {
+			const userId = localStorage.getItem('userId')
+			await updateCustomerData(userId, { customer_city: city })
+			updateUserData('customer_city', city)
+			setSearchTerm('')
+			onClose()
+			window.location.reload() 
+		} catch (error) {
+			console.error('Ошибка при обновлении города:', error)
+		}
 	}
 
 	const handleInputChange = e => {
 		setSearchTerm(e.target.value)
 	}
-
-	if (!isVisible) return null
 
 	const handleOverlayClick = e => {
 		if (e.target === e.currentTarget) {
@@ -31,6 +37,8 @@ const CityPopUp = ({ isVisible, onClose }) => {
 			onClose()
 		}
 	}
+
+	if (!isVisible) return null
 
 	return (
 		<div

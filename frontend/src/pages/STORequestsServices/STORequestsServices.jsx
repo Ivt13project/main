@@ -1,53 +1,60 @@
 import { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
-import STOrequestsData from '../../data/STOrequsetsData'
 import './STORequestsServices.scss'
 import STORequestsServicesItem from './STORequestsServicesItem/STORequestsServicesItem'
+import { fetchSTORequests, updateSTORequestStatus } from '/src/api/api'
+
+const STATUS_MAP = {
+	PENDING: 'Ожидает подтверждения',
+	IN_PROGRESS: 'В работе',
+	COMPLETED: 'Выполненные',
+	CANCELLED: 'Отмененные',
+}
 
 const STORequestsServices = () => {
+	const [activeTab, setActiveTab] = useState('Ожидает подтверждения')
+	const [data, setData] = useState({
+		'Ожидает подтверждения': [],
+		'В работе': [],
+		Выполненные: [],
+		Отмененные: [],
+	})
+
 	useEffect(() => {
 		document.title = 'Заявки на оказание услуг | 4inilka'
+		loadRequests()
 	}, [])
 
-	const [activeTab, setActiveTab] = useState('Ожидает подтверждения')
-	const [data, setData] = useState(STOrequestsData)
+	const loadRequests = async () => {
+		try {
+			const requests = await fetchSTORequests()
 
-	const handleMoveToInProgress = requestId => {
-		const requestToMove = data['Ожидает подтверждения'].find(
-			request => request.id === requestId
-		)
+			const categorizedData = {
+				'Ожидает подтверждения': [],
+				'В работе': [],
+				Выполненные: [],
+				Отмененные: [],
+			}
 
-		if (requestToMove) {
-			setData(prevData => ({
-				...prevData,
-				'Ожидает подтверждения': prevData['Ожидает подтверждения'].filter(
-					request => request.id !== requestId
-				),
-				'В работе': [
-					...prevData['В работе'],
-					{ ...requestToMove, status: 'Работает' },
-				],
-			}))
+			requests.forEach(request => {
+				const readableStatus = STATUS_MAP[request.status]
+				if (readableStatus) {
+					categorizedData[readableStatus].push(request)
+				}
+			})
+
+			setData(categorizedData)
+		} catch (error) {
+			console.error('Ошибка при загрузке заявок:', error)
 		}
 	}
 
-	const handleMoveToCancelled = requestId => {
-		const activeRequests = data[activeTab]
-		const requestToCancel = activeRequests.find(
-			request => request.id === requestId
-		)
-
-		if (requestToCancel) {
-			setData(prevData => ({
-				...prevData,
-				[activeTab]: prevData[activeTab].filter(
-					request => request.id !== requestId
-				),
-				Отмененные: [
-					...prevData['Отмененные'],
-					{ ...requestToCancel, status: 'Отменена' },
-				],
-			}))
+	const handleStatusChange = async (id, newStatus) => {
+		try {
+			await updateSTORequestStatus(id, newStatus)
+			await loadRequests()
+		} catch (error) {
+			console.error('Ошибка при обновлении статуса:', error)
 		}
 	}
 
@@ -70,14 +77,15 @@ const STORequestsServices = () => {
 					))}
 				</div>
 				<div className='requests__cards'>
-					{data[activeTab].length > 0 ? (
+					{data[activeTab]?.length > 0 ? (
 						data[activeTab].map(request => (
 							<STORequestsServicesItem
 								key={request.id}
 								data={request}
-								activeTab={activeTab} 
-								onCancel={() => handleMoveToCancelled(request.id)}
-								onConfirm={() => handleMoveToInProgress(request.id)}
+								activeTab={activeTab}
+								onCancel={() => handleStatusChange(request.id, 'CANCELLED')}
+								onConfirm={() => handleStatusChange(request.id, 'IN_PROGRESS')}
+								onComplete={() => handleStatusChange(request.id, 'COMPLETED')}
 							/>
 						))
 					) : (

@@ -43,11 +43,14 @@ const Header = () => {
 					onCityClick={handleCityButtonClick}
 					selectedCity={selectedCity}
 				/>
-				<ContactsPopUp isVisible={isContactPopUpVisible} onClose={handleClose} />
+				<ContactsPopUp
+					isVisible={isContactPopUpVisible}
+					onClose={handleClose}
+				/>
 				<CityPopUp
 					isVisible={isCityPopUpVisible}
 					onClose={handleClose}
-					onCitySelect={handleCitySelect}
+					onCitySelect={handleCitySelect} 
 				/>
 			</div>
 		</header>

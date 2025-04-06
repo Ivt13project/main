@@ -1,16 +1,18 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router' 
 import NameInput from '../NameInput/NameInput'
 import PasswordInput from '../PasswordInput/PasswordInput'
 import PhoneInput from '../PhoneInput/PhoneInput'
 import SubmitButton from '../SubmitButton/SubmitButton'
+import { registerCustomer } from '/src/api/api.js'
 import './RegisterForm.scss'
 
 const RegisterForm = () => {
+	const navigate = useNavigate() 
 	const [name, setName] = useState('')
 	const [password, setPassword] = useState('')
 	const [confirmPassword, setConfirmPassword] = useState('')
 	const [phone, setPhone] = useState('')
-
 	const [errors, setErrors] = useState({
 		name: '',
 		password: '',
@@ -18,7 +20,7 @@ const RegisterForm = () => {
 		phone: '',
 	})
 
-	const handleSubmit = e => {
+	const handleSubmit = async e => {
 		e.preventDefault()
 		const newErrors = {
 			name: '',
@@ -41,7 +43,13 @@ const RegisterForm = () => {
 			!newErrors.confirmPassword &&
 			!newErrors.phone
 		) {
-			console.log('Форма отправлена')
+			try {
+				const response = await registerCustomer({ name, password, phone })
+				console.log('Успешная регистрация:', response)
+				navigate('/login') 
+			} catch (error) {
+				console.error('Ошибка:', error)
+			}
 		}
 	}
 

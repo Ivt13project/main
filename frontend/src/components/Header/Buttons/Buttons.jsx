@@ -7,7 +7,8 @@ import { useUser } from '/src/data/userContext'
 const Buttons = ({ onContactClick, onCityClick }) => {
 	const [isMenuOpen, setMenuOpen] = useState(false)
 	const { userData } = useUser()
-	const isLoggedIn = true
+
+	const isLoggedIn = Boolean(localStorage.getItem('userId'))
 
 	const handleProfileClick = () => {
 		setMenuOpen(true)
@@ -27,8 +28,8 @@ const Buttons = ({ onContactClick, onCityClick }) => {
 							alt='Выбор города'
 						/>
 					</button>
-					{userData.city && (
-						<span className='selected-city'>{userData.city}</span>
+					{userData.customer_city && (
+						<span className='selected-city'>{userData.customer_city}</span>
 					)}
 				</div>
 				<button className='header__button' onClick={onContactClick}>

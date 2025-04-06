@@ -2,6 +2,15 @@
 import './NameInput.scss'
 
 const NameInput = ({ placeholder, value, onChange, error }) => {
+	const handleChange = e => {
+		const { value } = e.target
+		const regex = /^[а-яА-ЯёЁ\s]*$/
+
+		if (regex.test(value) || value === '') {
+			onChange(e)
+		}
+	}
+
 	return (
 		<div>
 			<input
@@ -9,7 +18,7 @@ const NameInput = ({ placeholder, value, onChange, error }) => {
 				type='text'
 				placeholder={placeholder}
 				value={value}
-				onChange={onChange}
+				onChange={handleChange}
 			/>
 			{error && <p className='error-message'>{error}</p>}
 		</div>

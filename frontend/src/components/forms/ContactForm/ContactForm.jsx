@@ -1,60 +1,58 @@
 /* eslint-disable react/prop-types */
+import { useEffect } from 'react'
 import { IMaskInput } from 'react-imask'
 import './ContactForm.scss'
+import { fetchCustomerData } from '/src/api/api.js'
 import cities from '/src/data/citiesData.js'
 
-const ContactForm = ({
-	localData,
-	setLocalData,
-	isCountryOpen,
-	setCountryOpen,
-	isCityOpen,
-	setCityOpen,
-}) => {
+const ContactForm = ({ localData, setLocalData, isCityOpen, setCityOpen }) => {
+	const userId = localStorage.getItem('userId')
+
+	useEffect(() => {
+		const fetchData = async () => {
+			if (userId) {
+				try {
+					const userData = await fetchCustomerData(userId)
+					setLocalData({
+						customer_name: userData.customer_name || '',
+						customer_email: userData.customer_email || '',
+						customer_phone_number: userData.customer_phone_number || '',
+						customer_city: userData.customer_city || '',
+					})
+				} catch (error) {
+					console.error('Ошибка при получении данных:', error)
+				}
+			}
+		}
+
+		fetchData()
+	}, [userId, setLocalData])
+
 	const handleCitySelect = selectedCity => {
-		setLocalData(prevData => ({ ...prevData, city: selectedCity }))
+		setLocalData(prevData => ({
+			...prevData,
+			customer_city: selectedCity,
+		}))
 		setCityOpen(false)
 	}
 
-	const handleCountrySelect = selectedCountry => {
-		setLocalData(prevData => ({ ...prevData, country: selectedCountry }))
-		setCountryOpen(false)
-	}
-
-	const handleNameChange = e => {
-		const value = e.target.value
-		const regex = /^[а-яА-ЯёЁ]+$/ 
-		if (regex.test(value) || value === '') {
-			setLocalData(prevData => ({
-				...prevData,
-				name: value,
-			}))
-		}
+	const handleInputChange = field => e => {
+		setLocalData(prevData => ({
+			...prevData,
+			[field]: e.target.value,
+		}))
 	}
 
 	return (
-		<form className='contact-info__form'>
+		<form className='contact-info__form' onSubmit={e => e.preventDefault()}>
 			<div className='contact-info__field'>
 				<label htmlFor='name'>Ваше имя</label>
 				<input
 					type='text'
 					className='contact-info__input'
 					placeholder='Введите ваше имя'
-					value={localData.name}
-					onChange={handleNameChange}
-				/>
-			</div>
-
-			<div className='contact-info__field'>
-				<label htmlFor='birthdate'>Дата рождения</label>
-				<IMaskInput
-					mask='00.00.0000'
-					className='contact-info__input'
-					placeholder='ДД.ММ.ГГГГ'
-					value={localData.birthdate}
-					onAccept={value =>
-						setLocalData(prevData => ({ ...prevData, birthdate: value }))
-					}
+					value={localData.customer_name}
+					onChange={handleInputChange('customer_name')}
 				/>
 			</div>
 
@@ -64,10 +62,13 @@ const ContactForm = ({
 					mask='+{7}(000)000-00-00'
 					className='contact-info__input'
 					placeholder='+7(800)___-__-__'
-					value={localData.phone}
-					onAccept={value =>
-						setLocalData(prevData => ({ ...prevData, phone: value }))
-					}
+					value={localData.customer_phone_number}
+					onAccept={value => {
+						setLocalData(prevData => ({
+							...prevData,
+							customer_phone_number: value,
+						}))
+					}}
 				/>
 			</div>
 
@@ -77,41 +78,9 @@ const ContactForm = ({
 					type='email'
 					className='contact-info__input'
 					placeholder='example@mail.com'
-					value={localData.email}
-					onChange={e =>
-						setLocalData(prevData => ({
-							...prevData,
-							email: e.target.value,
-						}))
-					}
+					value={localData.customer_email}
+					onChange={handleInputChange('customer_email')}
 				/>
-			</div>
-
-			<div className='contact-info__field'>
-				<label htmlFor='contact-info__country'>Страна</label>
-				<div className='contact-info__dropdown'>
-					<div
-						className='contact-info__dropdown-selection'
-						onClick={() => setCountryOpen(!isCountryOpen)}
-					>
-						<span>{localData.country}</span>
-						<img
-							src='/src/assets/icons/arrow-down-svgrepo-com.svg'
-							className={`arrow ${isCountryOpen ? 'open' : ''}`}
-							alt='toggle'
-						/>
-					</div>
-					{isCountryOpen && (
-						<ul className='contact-info__dropdown-list'>
-							<li
-								className='contact-info__dropdown-item'
-								onClick={() => handleCountrySelect('Россия')}
-							>
-								Россия
-							</li>
-						</ul>
-					)}
-				</div>
 			</div>
 
 			<div className='contact-info__field'>
@@ -121,7 +90,7 @@ const ContactForm = ({
 						className='contact-info__dropdown-selection'
 						onClick={() => setCityOpen(!isCityOpen)}
 					>
-						<span>{localData.city || 'Выберите город'}</span>
+						<span>{localData.customer_city || 'Выберите город'}</span>
 						<img
 							src='/src/assets/icons/arrow-down-svgrepo-com.svg'
 							className={`arrow ${isCityOpen ? 'open' : ''}`}
