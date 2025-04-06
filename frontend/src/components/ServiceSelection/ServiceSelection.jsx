@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react'
 import './ServiceSelection.scss'
-import { fetchServiceTypes, fetchServiceDetails } from '/src/api/api'
+import { fetchServiceDetails, fetchServiceTypes } from '/src/api/api'
 
 const ServiceSelection = ({ onToggle, activeCategory, selectedServices }) => {
 	const [serviceTypes, setServiceTypes] = useState([])
@@ -13,14 +13,35 @@ const ServiceSelection = ({ onToggle, activeCategory, selectedServices }) => {
 			'https://uremont-dev.s3.eu-central-1.amazonaws.com/upload/75/f8/75f8a15736aec7c16ba6790b2c9ebfba.svg',
 		'Тормозная система':
 			'https://uremont-dev.s3.eu-central-1.amazonaws.com/upload/8e/c6/8ec609a9e2aa302a80176df6b5fcb188.svg',
-		'Трансмиссия':
+		Трансмиссия:
 			'https://uremont-dev.s3.eu-central-1.amazonaws.com/upload/3e/52/3e52af02cf8160ce1d53cfa32c5fe45b.svg',
+		'Стекло замена':
+			'https://uremont-dev.s3.eu-central-1.amazonaws.com/upload/c8/e6/c8e628e11e2456375f783a4dd1d85e3d.svg',
+		Автоэлектрика:
+			'https://uremont-dev.s3.eu-central-1.amazonaws.com/upload/29/96/29961d111ede8b082283d42c2679159f.svg',
+		Ремонт:
+			'https://uremont-dev.s3.eu-central-1.amazonaws.com/upload/c9/b8/c9b85e2c92551e00dcc7cc1dfaccbe3c.svg',
+		'Полировка кузова':
+			'https://uremont-dev.s3.eu-central-1.amazonaws.com/upload/1a/4c/1a4c2cf96a5be72c1b21fd03869a3246.svg',
+		'Сервис салона автомобиля':
+			'https://uremont-dev.s3.eu-central-1.amazonaws.com/upload/ea/ac/eaac0eea55857052b47c348cad683637.svg',
+		Шиномонтаж:
+			'https://uremont-dev.s3.eu-central-1.amazonaws.com/upload/90/c9/90c970893e83e3e8019c55d90c894850.svg',
+		'Дополнительное оборудование':
+			'https://uremont-dev.s3.eu-central-1.amazonaws.com/upload/39/ea/39eafb1caca0b7e99eb83bce191932fb.svg',
 	}
 
 	const categoryMapping = {
 		1: 'Ремонтные работы',
-		2: 'Кузовные работы',
-		3: 'Другие работы',
+		2: 'Ремонтные работы',
+		3: 'Ремонтные работы',
+		4: 'Ремонтные работы',
+		5: 'Ремонтные работы',
+		6: 'Кузовные работы',
+		7: 'Кузовные работы',
+		8: 'Кузовные работы',
+		9: 'Другие работы',
+		10: 'Другие работы',
 	}
 
 	useEffect(() => {
@@ -55,7 +76,7 @@ const ServiceSelection = ({ onToggle, activeCategory, selectedServices }) => {
 				{filteredGroups.map(group => {
 					const isActive = selectedServices[group.type_name]?.length > 0
 					const isCurrentGroup = selectedGroup?.id === group.id
-					const iconPath = iconMapping[group.type_name] || '' 
+					const iconPath = iconMapping[group.type_name] || ''
 
 					return (
 						<li

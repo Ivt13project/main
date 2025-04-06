@@ -64,7 +64,7 @@ const CarServiceSelection = ({ setSelectedOrganizationId }) => {
 									? service.addresses
 											.map(
 												address =>
-													`${address.city_name}, ${address.street_name}, ${address.house_number}`
+													`${address.city_name}, ул. ${address.street_name}, д. ${address.house_number}`
 											)
 											.join(', ')
 									: 'Нет адресов'}

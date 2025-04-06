@@ -69,6 +69,7 @@ const ContactForm = ({ localData, setLocalData, isCityOpen, setCityOpen }) => {
 							customer_phone_number: value,
 						}))
 					}}
+					disabled
 				/>
 			</div>
 
