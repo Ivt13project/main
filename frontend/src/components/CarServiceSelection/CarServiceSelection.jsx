@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './CarServiceSelection.scss'
 import { fetchOrganizations } from '/src/api/api.js'
 
@@ -50,27 +50,33 @@ const CarServiceSelection = ({ setSelectedOrganizationId }) => {
 			</div>
 			{isOpen && (
 				<ul className='car-service__list'>
-					{filteredOrganizations.map((service, index) => (
-						<li
-							key={index}
-							className={`car-service__item ${
-								selectedService === service.id ? 'selected' : ''
-							}`}
-							onClick={() => handleSelectService(service)}
-						>
-							<strong>{service.organization_short_name}</strong>
-							<p>
-								{service.addresses.length > 0
-									? service.addresses
-											.map(
-												address =>
-													`${address.city_name}, ул. ${address.street_name}, д. ${address.house_number}`
-											)
-											.join(', ')
-									: 'Нет адресов'}
-							</p>
+					{filteredOrganizations.length > 0 ? (
+						filteredOrganizations.map((service, index) => (
+							<li
+								key={index}
+								className={`car-service__item ${
+									selectedService === service.id ? 'selected' : ''
+								}`}
+								onClick={() => handleSelectService(service)}
+							>
+								<strong>{service.organization_short_name}</strong>
+								<p>
+									{service.addresses.length > 0
+										? service.addresses
+												.map(
+													address =>
+														`${address.city_name}, ул. ${address.street_name}, д. ${address.house_number}`
+												)
+												.join(', ')
+										: 'Нет адресов'}
+								</p>
+							</li>
+						))
+					) : (
+						<li className='car-service__item'>
+							<strong>В городе нет автосервисов</strong>
 						</li>
-					))}
+					)}
 				</ul>
 			)}
 		</div>
