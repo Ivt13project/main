@@ -170,7 +170,6 @@ export const createServiceRequest = async data => {
 export const fetchSTORequests = async () => {
 	const orgId = localStorage.getItem('orgId')
 	const response = await axios.get(`${API_URL}service/requests?organization_id=${orgId}`)
-	console.log(response.data)
 	return response.data
 }
 
@@ -188,3 +187,4 @@ export const updateSTORequestStatus = async (id, status) => {
 		throw error
 	}
 }
+

@@ -11,6 +11,7 @@ const cities = [
 	'Самара',
 	'Уфа',
 	'Челябинск',
+	'Уральск',
 ]
 
 export default cities

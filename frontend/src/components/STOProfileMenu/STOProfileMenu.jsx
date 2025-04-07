@@ -94,6 +94,9 @@ const STOProfileMenu = ({ isOpen, onClose }) => {
 									<strong>КПП:</strong> {organizationData.kpp}
 								</p>
 								<p>
+									<strong>ОГРН:</strong> {organizationData.ogrn}
+								</p>
+								<p>
 									<strong>Контактное лицо:</strong> {getFullName()}
 								</p>
 								<p>
