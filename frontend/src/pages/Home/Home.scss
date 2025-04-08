@@ -1,0 +1,19 @@
+@use '/src/styles/style' as *;
+
+.main {
+	.main__container {
+		.main__title {
+			font-size: 3rem;
+			line-height: 3.5rem;
+			font-weight: 700;
+			text-align: center;
+			margin-top: 40px;
+		}
+		.main__sub-title {
+			font-size: 18px;
+			font-weight: 400;
+			text-align: center;
+			margin-top: 10px;
+		}
+	}
+}

@@ -1,0 +1,24 @@
+@use '/src/styles/style' as *;
+
+.request__button-group {
+	display: flex;
+	margin-top: auto;
+	gap: 15px;
+	.request__confirm-button {
+		width: 50%;
+		background-color: #ffa542;
+		color: #fff;
+		padding: 8px;
+		border-radius: 5px;
+		font-weight: 500;
+		margin-top: 5px;
+		transition: 0.2s;
+
+		&:hover {
+			background-color: #ffa442cc;
+		}
+	}
+	.request__cancel-button {
+		width: 50%;
+	}
+}

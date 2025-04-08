@@ -1,0 +1,64 @@
+@use '/src/styles/style' as *;
+
+.reviews-section {
+	padding-bottom: 40px;
+	margin-top: 40px;
+	h1 {
+		font-size: 2.125rem;
+		line-height: 2.5rem;
+		font-weight: 600;
+	}
+
+	.reviews__cards {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+		margin-top: 20px;
+
+		.review__card {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			padding: 20px;
+			background-color: #fff;
+			border-radius: 10px;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+			.review-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding-bottom: 10px;
+				border-bottom: 1px solid #e8e8ed;
+
+				.service-type {
+					background-color: $orange-color;
+					color: $white-color;
+					padding: 5px 10px;
+					border-radius: 5px;
+				}
+
+				.stars {
+					color: $orange-color;
+					font-size: 25px;
+				}
+			}
+
+			.review-author {
+				font-weight: 600;
+				font-size: 1.1em;
+				margin-top: 10px;
+			}
+
+			.review-car {
+				color: #555;
+				margin-bottom: 10px;
+			}
+
+			.review-text {
+				border-top: 1px solid #e8e8ed;
+				padding-top: 10px;
+			}
+		}
+	}
+}

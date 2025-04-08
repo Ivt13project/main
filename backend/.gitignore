@@ -3,6 +3,8 @@
 *.pyo
 *.pyd
 __pycache__/
+*.py[cod]
+*$py.class
 
 # Файлы конфигурации окружения
 .env
@@ -17,9 +19,6 @@ venv.bak/
 # Файлы миграций Django (если вы не хотите отслеживать их в Git)
 */migrations/*.py
 !*/migrations/__init__.py
-
-# Файлы, сгенерированные Django
-db.sqlite3
 
 # Файлы конфигурации редакторов и IDE
 .vscode/

@@ -1,0 +1,36 @@
+@use '/src/styles/style' as *;
+
+.profile__container {
+	.contact-info {
+		background-color: $white-color;
+		padding: 20px;
+		margin-top: 30px;
+		border-radius: 10px;
+		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+		width: 60%;
+
+		.contact-info__top {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.contact-info__title {
+				font-size: 18px;
+				font-weight: 600;
+				line-height: 1.5rem;
+			}
+
+			.contact-info__submit {
+				color: $orange-color;
+				font-weight: 600;
+				background: none;
+				font-size: 15px;
+				transition: 0.1s;
+
+				&:hover {
+					color: #ffa442cc;
+				}
+			}
+		}
+	}
+}

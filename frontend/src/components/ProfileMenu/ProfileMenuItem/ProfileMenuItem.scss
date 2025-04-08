@@ -1,0 +1,24 @@
+@use '/src/styles/style' as *;
+
+.profile-menu__item {
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 10px;
+	.profile-menu__link {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		color: $main-text-color;
+		transition: 0.1s;
+		width: fit-content;
+		font-size: 15px;
+
+		img {
+			width: 20px;
+			height: 20px;
+		}
+
+		&:hover {
+			color: $orange-color;
+		}
+	}
+}

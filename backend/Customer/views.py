@@ -2,32 +2,45 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Customer
-from .serializers import CustomerSerializer
+from .serializers import CustomerSerializer, CustomerRegisterSerializer
 from .jwt_auth import CustomerRefreshToken
 
 
-class CustomerRegisterView(generics.CreateAPIView):
+class CustomerDetailAPIView(generics.RetrieveUpdateAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+    
+    def get(self, request, *args, **kwargs):
+        customer = self.get_object()
+        serializer = self.get_serializer(customer)
+        return Response(serializer.data)
+
+    def patch(self, request, *args, **kwargs):
+        customer = self.get_object()
+        serializer = self.get_serializer(customer, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CustomerRegisterView(generics.CreateAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerRegisterSerializer
 
 class CustomerLoginView(generics.GenericAPIView):
-    def post(self, request, *args, **kwargs):
+    serializer_class = CustomerRegisterSerializer
+    def post(self, request):
         phone_number = request.data.get('customer_phone_number')
         password = request.data.get('password')
-
-        if not phone_number or not password:
-            return Response({'error': 'Отсутствуют обязательные поля'}, status=status.HTTP_400_BAD_REQUEST)
-
-        customer = Customer.objects.filter(customer_phone_number=phone_number).first()
-
-        if customer is None:
-            return Response({'error': 'Пользователь с таким номером телефона не найден'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if not customer.check_password(password):
-            return Response({'error': 'Неверный пароль'}, status=status.HTTP_400_BAD_REQUEST)
-
-        refresh = CustomerRefreshToken.for_user(customer)
-        return Response({
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-        })
+        
+        try:
+            customer = Customer.objects.get(customer_phone_number=phone_number)
+        except Customer.DoesNotExist:
+            return Response({'error': 'Пользователь не найден'}, status=status.HTTP_404_NOT_FOUND)
+        
+        if customer.check_password(password):
+            return Response({'id': customer.id}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Неверный пароль'}, status=status.HTTP_401_UNAUTHORIZED)
